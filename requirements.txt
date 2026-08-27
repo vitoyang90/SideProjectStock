@@ -1,0 +1,5 @@
+numpy>=2.0,<3
+pandas>=3.0,<4
+requests>=2.34,<3
+scikit-learn>=1.7,<2
+xgboost>=3.0,<4

@@ -1,0 +1,109 @@
+{
+  "feature_count": 43,
+  "class_weighting": "none",
+  "purge_rows": 5,
+  "best_iteration": 0,
+  "best_validation_mlogloss": 1.0585454721160297,
+  "splits": {
+    "train": {
+      "rows": 1219,
+      "start": "2018-01-02",
+      "end": "2022-12-23",
+      "class_counts": {
+        "down": 295,
+        "neutral": 553,
+        "up": 371
+      }
+    },
+    "validation": {
+      "rows": 476,
+      "start": "2023-01-03",
+      "end": "2024-12-24",
+      "class_counts": {
+        "down": 95,
+        "neutral": 214,
+        "up": 167
+      }
+    },
+    "test": {
+      "rows": 392,
+      "start": "2025-01-02",
+      "end": "2026-08-17",
+      "class_counts": {
+        "down": 88,
+        "neutral": 151,
+        "up": 153
+      }
+    }
+  },
+  "test": {
+    "accuracy": 0.3852040816326531,
+    "balanced_accuracy": 0.3333333333333333,
+    "macro_f1": 0.18538980969920196,
+    "mlogloss": 1.0871384143829346,
+    "confusion_matrix": [
+      [
+        0,
+        88,
+        0
+      ],
+      [
+        0,
+        151,
+        0
+      ],
+      [
+        0,
+        153,
+        0
+      ]
+    ],
+    "classification_report": {
+      "down": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 88.0
+      },
+      "neutral": {
+        "precision": 0.3852040816326531,
+        "recall": 1.0,
+        "f1-score": 0.5561694290976059,
+        "support": 151.0
+      },
+      "up": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 153.0
+      },
+      "accuracy": 0.3852040816326531,
+      "macro avg": {
+        "precision": 0.1284013605442177,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.18538980969920196,
+        "support": 392.0
+      },
+      "weighted avg": {
+        "precision": 0.14838218450645566,
+        "recall": 0.3852040816326531,
+        "f1-score": 0.21423873416770023,
+        "support": 392.0
+      }
+    }
+  },
+  "majority_baseline": {
+    "class": "neutral",
+    "accuracy": 0.3852040816326531,
+    "balanced_accuracy": 0.3333333333333333,
+    "macro_f1": 0.18538980969920196
+  },
+  "training_prior_probability_baseline": {
+    "probabilities": {
+      "down": 0.24200164068908941,
+      "neutral": 0.45365053322395404,
+      "up": 0.30434782608695654
+    },
+    "mlogloss": 1.0872866265049597
+  }
+}
