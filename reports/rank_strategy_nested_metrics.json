@@ -1,0 +1,52 @@
+{
+  "version": "low_turnover_rank_strategy_nested",
+  "status": "nested_validation_failed",
+  "selection_policy": "Each year uses only prior walk-forward years; cash when no rule passes",
+  "test_period_used": false,
+  "evaluation_years": [
+    2022,
+    2023,
+    2024
+  ],
+  "maximum_drawdown_degradation": 0.05,
+  "metrics": {
+    "evaluation": "nested_walk_forward_2022_2024",
+    "strategy": "nested_low_turnover_rank",
+    "start": "2022-01-04",
+    "end": "2024-12-31",
+    "intervals": 144,
+    "gross_total_return": -0.3477223304319026,
+    "net_total_return": -0.3848525536971289,
+    "gross_cagr": -0.1331743512454212,
+    "net_cagr": -0.15000144242779923,
+    "net_annualized_sharpe": -0.7759281074979492,
+    "net_max_drawdown": -0.44515830572509374,
+    "buys": 10,
+    "sells": 10,
+    "one_way_turnover": 20
+  },
+  "profitable_years": 0,
+  "yearly": [
+    {
+      "year": 2022,
+      "net_total_return": -0.3848525536971289,
+      "net_annualized_sharpe": -1.3367949646787194,
+      "net_max_drawdown": -0.44515830572509374,
+      "one_way_turnover": 20
+    },
+    {
+      "year": 2023,
+      "net_total_return": 0.0,
+      "net_annualized_sharpe": 0.0,
+      "net_max_drawdown": 0.0,
+      "one_way_turnover": 0
+    },
+    {
+      "year": 2024,
+      "net_total_return": 0.0,
+      "net_annualized_sharpe": 0.0,
+      "net_max_drawdown": 0.0,
+      "one_way_turnover": 0
+    }
+  ]
+}

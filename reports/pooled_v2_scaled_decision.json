@@ -1,0 +1,31 @@
+{
+  "version": "v2_pooled_scaled",
+  "status": "rejected_retrospective",
+  "stocks": [
+    "2330",
+    "2317",
+    "2454",
+    "2303",
+    "2881",
+    "1301"
+  ],
+  "feature_count": 25,
+  "scaling": {
+    "price_level_indicators": "divide MACD family by same-day close; use ATR ratio",
+    "daily_flows": "divide by same-day volume",
+    "rolling_flows": "divide by matching rolling volume sum",
+    "balances": "divide by trailing 20-day average volume",
+    "future_data_used": false
+  },
+  "warning": "2025-2026 was previously viewed; fresh forward data is required for promotion",
+  "external_test": {
+    "classification_balanced_accuracy_wins": 3,
+    "classification_macro_f1_wins": 2,
+    "backtest_return_wins": 3,
+    "stocks": 6,
+    "mean_delta_balanced_accuracy": -0.015095666763308443,
+    "mean_delta_macro_f1": -0.007116148748632163,
+    "mean_delta_net_return": 0.2420766033485194
+  },
+  "model_path": "models/xgboost_v2_pooled_scaled_retrospective.json"
+}

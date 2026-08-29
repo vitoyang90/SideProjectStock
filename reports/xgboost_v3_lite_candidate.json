@@ -1,0 +1,68 @@
+{
+  "version": "v3_lite",
+  "status": "rejected_after_external_validation",
+  "base_version": "v2",
+  "added_features": [
+    "pb"
+  ],
+  "features": [
+    "return_1d",
+    "return_5d_past",
+    "ma5_ratio",
+    "ma20_ratio",
+    "rsi_14",
+    "macd",
+    "macd_signal",
+    "macd_hist",
+    "atr_14",
+    "atr_ratio",
+    "volatility_20",
+    "volume_ratio_20",
+    "foreign_net",
+    "foreign_3d",
+    "foreign_5d",
+    "trust_net",
+    "trust_3d",
+    "trust_5d",
+    "dealer_net",
+    "dealer_3d",
+    "dealer_5d",
+    "institutional_total_net",
+    "margin_balance",
+    "margin_change",
+    "short_balance",
+    "short_change",
+    "pb"
+  ],
+  "label_threshold": 0.015,
+  "class_weighting": "balanced",
+  "training": {
+    "rows": 1700,
+    "start": "2018-01-02",
+    "end": "2024-12-24",
+    "class_counts": {
+      "down": 487,
+      "neutral": 583,
+      "up": 630
+    },
+    "cutoff_exclusive": "2025-01-01",
+    "boundary_purge_rows": 5
+  },
+  "tree_selection": {
+    "source": "four pre-test walk-forward folds",
+    "fold_best_iterations_zero_based": [
+      2,
+      29,
+      1,
+      5
+    ],
+    "method": "median best iteration plus one",
+    "n_estimators": 4
+  },
+  "test_policy": {
+    "evaluated_on_2025_2026_viewed_test": false,
+    "external_validation_after": "2026-08-24",
+    "external_stock_validation": "completed_and_failed"
+  },
+  "model_path": "models/xgboost_v3_lite_candidate.json"
+}

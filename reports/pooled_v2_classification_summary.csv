@@ -1,0 +1,3 @@
+﻿evaluation,observations,stocks,mean_balanced_accuracy,mean_macro_f1,mean_mlogloss
+external_test,6,6,0.3459019186552228,0.3030570776141072,1.0876428286234539
+walk_forward,24,6,0.3630185872766723,0.3261682851348721,1.0727465872963269

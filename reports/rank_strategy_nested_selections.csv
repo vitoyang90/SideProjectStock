@@ -1,0 +1,4 @@
+﻿evaluation_year,training_years,eligible_rules,selection_status,rank_buffer,switch_edge,minimum_return,training_net_return,training_sharpe,training_max_drawdown,training_turnover,training_profitable_years
+2022,2021,23,rule_selected,3.0,0.0,0.0,0.537848377426779,1.2119268954689173,-0.24043986374661208,14,1
+2023,2021+2022,0,cash_no_rule_passed,,,,0.0,0.0,0.0,0,0
+2024,2021+2022+2023,0,cash_no_rule_passed,,,,0.0,0.0,0.0,0,0

@@ -1,0 +1,32 @@
+{
+  "version": "low_turnover_rank_strategy",
+  "status": "superseded_by_nested_validation_failure",
+  "nested_validation": "failed",
+  "selection_period": "2021-01-01 through 2024-12-31 walk-forward only",
+  "test_period_used_for_selection": false,
+  "grid_size": 36,
+  "gate": {
+    "maximum_one_way_turnover": 104,
+    "minimum_profitable_years": 3,
+    "net_total_return_must_be_positive": true,
+    "minimum_allowed_max_drawdown": -0.5492224518386196,
+    "maximum_drawdown_degradation": 0.05
+  },
+  "passing_rules": 2,
+  "selected": {
+    "rank_buffer": 3,
+    "switch_edge": 0.0,
+    "minimum_return": 0.0025,
+    "gross_total_return": 0.7399942640494284,
+    "net_total_return": 0.3444769487054091,
+    "net_cagr": 0.07708184430317555,
+    "net_annualized_sharpe": 0.39516753722588843,
+    "net_max_drawdown": -0.44515830572509385,
+    "buys": 44,
+    "sells": 44,
+    "one_way_turnover": 88,
+    "profitable_years": 3,
+    "turnover_reduction": 0.5769230769230769,
+    "passes_gate": true
+  }
+}

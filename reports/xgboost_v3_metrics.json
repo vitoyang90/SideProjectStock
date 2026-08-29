@@ -1,0 +1,158 @@
+{
+  "version": "v3",
+  "feature_groups": [
+    "technical",
+    "chip",
+    "fundamental"
+  ],
+  "feature_count": 31,
+  "features": [
+    "return_1d",
+    "return_5d_past",
+    "ma5_ratio",
+    "ma20_ratio",
+    "rsi_14",
+    "macd",
+    "macd_signal",
+    "macd_hist",
+    "atr_14",
+    "atr_ratio",
+    "volatility_20",
+    "volume_ratio_20",
+    "foreign_net",
+    "foreign_3d",
+    "foreign_5d",
+    "trust_net",
+    "trust_3d",
+    "trust_5d",
+    "dealer_net",
+    "dealer_3d",
+    "dealer_5d",
+    "institutional_total_net",
+    "margin_balance",
+    "margin_change",
+    "short_balance",
+    "short_change",
+    "revenue_mom",
+    "revenue_yoy",
+    "pe",
+    "pb",
+    "dividend_yield"
+  ],
+  "class_weighting": "balanced",
+  "label_threshold": 0.015,
+  "purge_rows": 5,
+  "best_iteration": 2,
+  "best_validation_mlogloss": 1.098047301099442,
+  "splits": {
+    "train": {
+      "rows": 1219,
+      "start": "2018-01-02",
+      "end": "2022-12-23",
+      "class_counts": {
+        "down": 363,
+        "neutral": 416,
+        "up": 440
+      }
+    },
+    "validation": {
+      "rows": 476,
+      "start": "2023-01-03",
+      "end": "2024-12-24",
+      "class_counts": {
+        "down": 123,
+        "neutral": 166,
+        "up": 187
+      }
+    },
+    "test": {
+      "rows": 392,
+      "start": "2025-01-02",
+      "end": "2026-08-17",
+      "class_counts": {
+        "down": 104,
+        "neutral": 116,
+        "up": 172
+      }
+    }
+  },
+  "test": {
+    "accuracy": 0.2653061224489796,
+    "balanced_accuracy": 0.3245584274052598,
+    "macro_f1": 0.2032331569053193,
+    "mlogloss": 1.1053022146224976,
+    "prediction_counts": {
+      "down": 347,
+      "neutral": 38,
+      "up": 7
+    },
+    "confusion_matrix": [
+      [
+        86,
+        14,
+        4
+      ],
+      [
+        101,
+        15,
+        0
+      ],
+      [
+        160,
+        9,
+        3
+      ]
+    ],
+    "classification_report": {
+      "down": {
+        "precision": 0.2478386167146974,
+        "recall": 0.8269230769230769,
+        "f1-score": 0.38137472283813745,
+        "support": 104.0
+      },
+      "neutral": {
+        "precision": 0.39473684210526316,
+        "recall": 0.12931034482758622,
+        "f1-score": 0.19480519480519481,
+        "support": 116.0
+      },
+      "up": {
+        "precision": 0.42857142857142855,
+        "recall": 0.01744186046511628,
+        "f1-score": 0.0335195530726257,
+        "support": 172.0
+      },
+      "accuracy": 0.2653061224489796,
+      "macro avg": {
+        "precision": 0.3570489624637964,
+        "recall": 0.3245584274052598,
+        "f1-score": 0.2032331569053193,
+        "support": 392.0
+      },
+      "weighted avg": {
+        "precision": 0.37060963147149173,
+        "recall": 0.2653061224489796,
+        "f1-score": 0.17353504311495027,
+        "support": 392.0
+      }
+    }
+  },
+  "majority_baseline": {
+    "class": "up",
+    "accuracy": 0.4387755102040816,
+    "balanced_accuracy": 0.3333333333333333,
+    "macro_f1": 0.2033096926713948
+  },
+  "delta_vs_majority_baseline": {
+    "balanced_accuracy": -0.008774905928073506,
+    "macro_f1": -7.653576607549728e-05
+  },
+  "training_prior_probability_baseline": {
+    "probabilities": {
+      "down": 0.2977850697292863,
+      "neutral": 0.3412633305988515,
+      "up": 0.3609515996718622
+    },
+    "mlogloss": 1.0866467468721699
+  }
+}

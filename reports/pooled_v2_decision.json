@@ -1,0 +1,51 @@
+{
+  "version": "v2_pooled",
+  "status": "rejected_retrospective",
+  "stocks": [
+    "2330",
+    "2317",
+    "2454",
+    "2303",
+    "2881",
+    "1301"
+  ],
+  "features": [
+    "return_1d",
+    "return_5d_past",
+    "ma5_ratio",
+    "ma20_ratio",
+    "rsi_14",
+    "macd",
+    "macd_signal",
+    "macd_hist",
+    "atr_14",
+    "atr_ratio",
+    "volatility_20",
+    "volume_ratio_20",
+    "foreign_net",
+    "foreign_3d",
+    "foreign_5d",
+    "trust_net",
+    "trust_3d",
+    "trust_5d",
+    "dealer_net",
+    "dealer_3d",
+    "dealer_5d",
+    "institutional_total_net",
+    "margin_balance",
+    "margin_change",
+    "short_balance",
+    "short_change"
+  ],
+  "warning": "2025-2026 was previously viewed; fresh forward data is required for promotion",
+  "external_test": {
+    "classification_balanced_accuracy_wins": 1,
+    "classification_macro_f1_wins": 2,
+    "backtest_return_wins": 2,
+    "stocks": 6,
+    "mean_delta_balanced_accuracy": -0.020846483109828406,
+    "mean_delta_macro_f1": -0.031279589730503043,
+    "mean_delta_net_return": -0.3404205911851661
+  },
+  "model_path": "models/xgboost_v2_pooled_retrospective.json"
+}

@@ -1,0 +1,20 @@
+{
+  "fixed_stock_pool": ["2317", "2454", "2303", "2881", "1301"],
+  "selection_policy": "Stock IDs fixed before downloading or inspecting results",
+  "decision": "reject_v3_lite_keep_v2",
+  "champion": "v2",
+  "candidate": null,
+  "external_test": {
+    "v2_mean_balanced_accuracy": 0.370256,
+    "v3_lite_mean_balanced_accuracy": 0.352133,
+    "v3_lite_balanced_accuracy_wins": 1,
+    "v2_mean_macro_f1": 0.336718,
+    "v3_lite_mean_macro_f1": 0.255676,
+    "v3_lite_macro_f1_wins": 1,
+    "stocks": 5,
+    "v2_mean_net_return": 0.585561,
+    "v3_lite_mean_net_return": 0.254819,
+    "v3_lite_net_return_wins": 1
+  },
+  "reason": "PB improvement observed on 2330 did not generalize across external stocks"
+}

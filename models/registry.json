@@ -1,0 +1,45 @@
+{
+  "champion": {
+    "version": "v2",
+    "status": "research_champion",
+    "features": "technical + chip",
+    "model_path": "models/xgboost_v2.json",
+    "reason": "Best retained out-of-sample classification and backtest result"
+  },
+  "candidate": null,
+  "research": [
+    {
+      "version": "return_ranker",
+      "status": "signal_only_not_tradeable",
+      "target": "continuous future five-day return and cross-sectional rank",
+      "reason": "Positive rank IC in all walk-forward folds, but turnover costs made net walk-forward return negative"
+    }
+  ],
+  "rejected": [
+    {
+      "version": "v3",
+      "features": "technical + chip + all fundamental",
+      "reason": "Failed retained 2025-2026 classification and backtest"
+    },
+    {
+      "version": "v3_lite",
+      "features": "technical + chip + pb",
+      "reason": "PB improved classification on only 1 of 5 external stocks"
+    },
+    {
+      "version": "v2_pooled",
+      "features": "pooled technical + raw chip features across six stocks",
+      "reason": "Cross-stock pooled model reduced external-test classification quality"
+    },
+    {
+      "version": "v2_pooled_scaled",
+      "features": "pooled scale-free technical + volume-scaled chip features",
+      "reason": "Only 2 of 6 stocks improved external-test classification; backtest gains were concentrated"
+    },
+    {
+      "version": "low_turnover_rank_strategy",
+      "features": "rank buffer + switching threshold + minimum predicted return",
+      "reason": "Nested strategy validation lost 38.49% in 2022 and selected cash for 2023-2024"
+    }
+  ]
+}
