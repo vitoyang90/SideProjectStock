@@ -4,7 +4,11 @@ from pathlib import Path
 
 import pandas as pd
 
-from backfill_news import find_contiguous_cache_start, next_backfill_chunk
+from backfill_news import (
+    find_contiguous_cache_start,
+    load_one_time_token,
+    next_backfill_chunk,
+)
 
 
 class NewsBackfillTests(unittest.TestCase):
@@ -39,6 +43,13 @@ class NewsBackfillTests(unittest.TestCase):
                 ),
                 (pd.Timestamp("2026-01-22"), pd.Timestamp("2026-01-31")),
             )
+
+    def test_reads_and_deletes_one_time_token_file(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            token_path = Path(directory) / "token.txt"
+            token_path.write_text("secret-token\n", encoding="utf-8")
+            self.assertEqual(load_one_time_token(token_path), "secret-token")
+            self.assertFalse(token_path.exists())
 
 
 if __name__ == "__main__":

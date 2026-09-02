@@ -1,0 +1,42 @@
+{
+  "schema_version": "v5_news_activity_1",
+  "status": "frozen_for_historical_walk_forward",
+  "stock_id": "2330",
+  "source_dataset": "FinMind TaiwanStockNews",
+  "raw_coverage": {
+    "start": "2020-04-01",
+    "end": "2026-08-17"
+  },
+  "recommended_model_start": "2021-01-01",
+  "availability_rule": {
+    "market_close_time": "13:30",
+    "timestamp_timezone_assumption": "Asia/Taipei",
+    "after_close_policy": "next trading date",
+    "non_trading_day_policy": "next trading date"
+  },
+  "active_features": [
+    "news_count",
+    "news_source_count",
+    "news_after_close_count",
+    "news_title_chars_mean",
+    "news_count_3d",
+    "news_count_5d"
+  ],
+  "excluded_features": {
+    "news_description_chars_mean": "excluded_constant: FinMind live response omitted description for all rows",
+    "news_has_update": "excluded_redundant: exactly derivable from news_count > 0"
+  },
+  "rolling_windows": {
+    "news_count_3d": {
+      "trading_days": 3,
+      "minimum_periods": 3
+    },
+    "news_count_5d": {
+      "trading_days": 5,
+      "minimum_periods": 5
+    }
+  },
+  "outside_coverage_policy": "missing_not_zero",
+  "selection_note": "Feature definitions were frozen before running the V5 model comparison.",
+  "schema_sha256": "2da7aec07330dc2c66fe040eea4741dfc532acf81812b7352d8a41be6a4a6f0d"
+}

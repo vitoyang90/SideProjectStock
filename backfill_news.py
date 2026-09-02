@@ -10,6 +10,9 @@ from build_news_features import write_news_outputs
 from collectors.news import fetch_stock_news
 
 
+TOKEN_FILE = Path("data/private/finmind_token.txt")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Resumably backfill V5 news from newest to oldest."
@@ -28,8 +31,30 @@ def parse_args() -> argparse.Namespace:
         help="Chunks per run; use 0 to continue until the target is complete.",
     )
     parser.add_argument("--market-close-time", default="13:30")
-    parser.add_argument("--request-delay-seconds", type=float, default=0.2)
+    parser.add_argument(
+        "--request-delay-seconds",
+        type=float,
+        help="Defaults to 6.6s with a token or 12.5s without one.",
+    )
     return parser.parse_args()
+
+
+def load_one_time_token(token_path: Path = TOKEN_FILE) -> str:
+    """Load a token from the environment or a local one-time file.
+
+    The file is deleted immediately after reading so the credential only
+    remains in this process memory during the backfill.
+    """
+    environment_token = os.environ.get("FINMIND_TOKEN", "").strip()
+    if environment_token:
+        return environment_token
+    if not token_path.exists():
+        return ""
+    token = token_path.read_text(encoding="utf-8-sig").strip()
+    token_path.unlink()
+    if not token or token == "請把 FinMind Token 貼在這裡，取代整行文字後儲存":
+        return ""
+    return token
 
 
 def _cache_path(cache_root: Path, item: pd.Timestamp) -> Path:
@@ -119,6 +144,12 @@ def main() -> None:
     progress_path.parent.mkdir(parents=True, exist_ok=True)
     completed_chunks: list[dict[str, str]] = []
     chunks_run = 0
+    token = load_one_time_token()
+    request_delay_seconds = (
+        args.request_delay_seconds
+        if args.request_delay_seconds is not None
+        else (6.6 if token else 12.5)
+    )
 
     while args.max_chunks == 0 or chunks_run < args.max_chunks:
         chunk = next_backfill_chunk(
@@ -135,8 +166,8 @@ def main() -> None:
                 stock_id=args.stock_id,
                 start_date=chunk_start.strftime("%Y-%m-%d"),
                 end_date=chunk_end.strftime("%Y-%m-%d"),
-                token=os.environ.get("FINMIND_TOKEN", ""),
-                request_delay_seconds=args.request_delay_seconds,
+                token=token,
+                request_delay_seconds=request_delay_seconds,
                 max_request_days=args.chunk_days,
             )
         except Exception as error:
@@ -157,6 +188,8 @@ def main() -> None:
                     ),
                     "failed_chunk_start": chunk_start.strftime("%Y-%m-%d"),
                     "failed_chunk_end": chunk_end.strftime("%Y-%m-%d"),
+                    "authenticated_request": bool(token),
+                    "request_delay_seconds": request_delay_seconds,
                     "error": f"{type(error).__name__}: {error}",
                 },
             )
@@ -179,6 +212,8 @@ def main() -> None:
                 "target_start": target_start.strftime("%Y-%m-%d"),
                 "target_end": target_end.strftime("%Y-%m-%d"),
                 "contiguous_cache_start": contiguous_start.strftime("%Y-%m-%d"),
+                "authenticated_request": bool(token),
+                "request_delay_seconds": request_delay_seconds,
                 "chunks_completed_this_run": completed_chunks,
             },
         )
@@ -217,6 +252,8 @@ def main() -> None:
             "target_end": target_end.strftime("%Y-%m-%d"),
             "contiguous_cache_start": contiguous_start.strftime("%Y-%m-%d"),
             "next_missing_date": next_date,
+            "authenticated_request": bool(token),
+            "request_delay_seconds": request_delay_seconds,
             "chunks_completed_this_run": completed_chunks,
             "quality": quality,
         },

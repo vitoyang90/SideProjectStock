@@ -72,7 +72,32 @@ LLM 或情緒模型。FinMind `TaiwanStockNews` 單次只回傳一天，因此�
 .\.venv\Scripts\python.exe backfill_news.py --stock-id 2330 --max-chunks 0
 ```
 
+若不熟悉環境變數，可將 token 單獨貼到 `data/private/finmind_token.txt` 後儲存。
+回補器會優先使用環境變數，否則讀取這個一次性檔案，並在讀取後立即刪除。
+完整回補預設以 token 每 6.6 秒、無 token 每 12.5 秒最多一個請求，保留在官方
+每小時額度以下；可用 `--request-delay-seconds` 明確覆寫。
+
 - `data/processed/<股票代號>_news_backfill_progress.json`：回補狀態、連續涵蓋起點與下一個缺口
+
+### V5 新聞品質審計與特徵凍結
+
+完整回補後先執行資料審計，不直接訓練模型：
+
+```powershell
+.\.venv\Scripts\python.exe audit_news.py
+```
+
+審計會驗證快取無缺日、新聞 ID 唯一、每日加總一致、收盤後新聞確實延至下一
+交易日，並輸出年度覆蓋、來源集中度、異常新聞量、連續零新聞與相對 2021 年的
+PSI 漂移。摘要欄位若持續缺失會從凍結特徵中排除，避免將常數欄位加入模型。
+
+- `reports/news_audit_summary.json`：硬性檢查、警告與是否可進入 V5 比較
+- `reports/news_audit_yearly.csv`：年度新聞量與缺值摘要
+- `reports/news_audit_sources.csv`：來源數量、占比與活躍期間
+- `reports/news_audit_anomalies.csv`：年度內異常新聞量日期
+- `reports/news_audit_zero_streaks.csv`：連續零新聞交易日
+- `reports/news_feature_drift.csv`：各特徵年度 PSI
+- `reports/news_feature_schema_v5.json`：模型比較前凍結的特徵與 SHA-256
 
 ## 執行
 

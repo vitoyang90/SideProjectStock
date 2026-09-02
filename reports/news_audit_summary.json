@@ -1,0 +1,46 @@
+{
+  "status": "pass_with_warnings",
+  "hard_checks": {
+    "backfill_complete": true,
+    "missing_cache_dates": 0,
+    "missing_cache_date_examples": [],
+    "news_id_unique": true,
+    "daily_aggregation_reconciled": true,
+    "available_date_not_before_publication": true,
+    "after_close_moves_to_later_date": true,
+    "feature_keys_unique": true
+  },
+  "coverage": {
+    "requested_start": "2020-04-01",
+    "requested_end": "2026-08-17",
+    "first_returned_article": "2020-07-28 07:00:00",
+    "last_returned_article": "2026-08-17 23:15:12",
+    "trading_days": 1553
+  },
+  "articles": {
+    "normalized_unique": 43576,
+    "unique_sources": 254,
+    "description_nonempty": 0,
+    "replacement_character_titles": 19,
+    "after_close_share": 0.1431521938681843
+  },
+  "daily_features": {
+    "zero_news_days": 187,
+    "zero_news_rate": 0.12041210560206053,
+    "max_news_count": 273,
+    "spike_anomalies": 5,
+    "zero_streaks_at_least_3_days": 12
+  },
+  "warnings": [
+    "description is empty for every article; exclude news_description_chars_mean",
+    "19 titles contain Unicode replacement characters",
+    "first returned article is later than requested coverage start; treat 2020 as warm-up only",
+    "one or more yearly feature distributions have PSI >= 0.25"
+  ],
+  "decision": {
+    "data_layer_usable": true,
+    "recommended_model_start": "2021-01-01",
+    "ready_to_build_v5_walk_forward": true,
+    "do_not_use_as_final_forward_proof": true
+  }
+}
