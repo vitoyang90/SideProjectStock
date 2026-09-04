@@ -19,12 +19,14 @@ class AnalyzeTests(unittest.TestCase):
         report = {
             "stock_id": "2330",
             "prediction_date": "2026-09-04",
-            "model": {"version": "v2"},
+            "data_staleness_calendar_days": 0,
+            "model": {"version": "v2", "artifact_id": "2330_v2_test"},
             "market_snapshot": {"close": 100.0},
             "prediction": {
                 "raw_top_class": "上漲",
                 "trend": "不確定",
                 "abstained": True,
+                "abstention_reasons": ["最高類別機率低於 40%"],
                 "confidence": 0.34,
                 "probabilities": {"down": 0.33, "neutral": 0.33, "up": 0.34},
             },
@@ -37,6 +39,16 @@ class AnalyzeTests(unittest.TestCase):
 
             recorded = pd.read_csv(path)
             self.assertEqual(len(recorded), 1)
+
+    def test_forward_record_rejects_stale_data(self):
+        report = {
+            "stock_id": "2454",
+            "prediction_date": "2026-08-24",
+            "data_staleness_calendar_days": 12,
+        }
+
+        with self.assertRaisesRegex(ValueError, "stale forward prediction"):
+            record_forward_prediction(report)
 
     def test_factor_summary_separates_observations_from_model_prediction(self):
         row = pd.Series({
@@ -89,6 +101,8 @@ class AnalyzeTests(unittest.TestCase):
             "prediction": {
                 "trend": "上漲",
                 "confidence": 0.6,
+                "abstained": False,
+                "abstention_reasons": [],
                 "probabilities": {"up": 0.6, "neutral": 0.3, "down": 0.1},
             },
             "factor_summary": {

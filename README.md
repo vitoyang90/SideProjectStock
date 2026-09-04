@@ -158,12 +158,40 @@ V2-market 的平均 Balanced Accuracy 與 Macro F1 分別提升 1.85 與 1.13 �
 
 輸出包含三類機率、技術面與籌碼面觀察、資料新鮮度及風險。當最高機率低於
 `40%`，或前兩名機率差不到 `5%`，系統會輸出「不確定」，不勉強產生方向訊號。
-目前只有 2330 具有已登錄的股票專屬 champion；其他股票會明確拒絕執行，不會
-錯用 2330 模型。
+目前支援 `2330、2454、2317、2308、2881`，每檔使用自己的 V2 模型，不會跨股票
+錯用模型。2454 的歷史平均 Balanced Accuracy 未高於三分類隨機基準，因此只提供
+資料摘要，固定禁止方向訊號。過期超過三個日曆日的資料也不得寫入 forward 紀錄。
 
-- `reports/analysis/2330_latest.json`：機器可讀分析結果
-- `reports/analysis/2330_latest.md`：人類可讀分析報告
-- `data/forward/2330_predictions.csv`：選擇性 forward 預測紀錄
+- `reports/analysis/<股票代號>_latest.json`：機器可讀分析結果
+- `reports/analysis/<股票代號>_latest.md`：人類可讀分析報告
+- `data/forward/<股票代號>_predictions.csv`：選擇性 forward 預測紀錄
+
+### 股票專屬 forward 模型
+
+以下指令會用 2021～2024 walk-forward 的最佳迭代中位數決定每檔樹數，再使用
+建置當時所有已知標籤重訓固定的 V2 特徵。這些模型只供建置日之後的新資料驗證：
+
+```powershell
+.\.venv\Scripts\python.exe train_stock_models.py
+```
+
+- `models/stocks/<股票代號>_v2_forward.json`：股票專屬模型
+- `reports/stock_models_walk_forward_folds.csv`：逐股票、逐年度結果
+- `reports/stock_models_summary.csv`：各股票四年摘要
+- `reports/stock_models_decision.json`：模型來源與使用限制
+
+### FastAPI
+
+啟動本機 API：
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn api.main:app --reload
+```
+
+- `GET /health`：服務狀態與支援股票
+- `GET /api/stocks`：模型品質與方向訊號資格
+- `POST /api/analyze/{stock_id}`：建立分析；可用 `refresh`、`record`、`as_of` 查詢參數
+- `GET /docs`：互動式 API 文件
 
 ## 執行
 

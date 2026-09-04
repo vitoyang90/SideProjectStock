@@ -29,11 +29,11 @@ LIVE_DIR = Path("data/live")
 DEFAULT_OUTPUT_DIR = Path("reports/analysis")
 FORWARD_DIR = Path("data/forward")
 REGISTRY_PATH = Path("models/registry.json")
-SUPPORTED_MODEL_STOCKS = {"2330"}
 CLASS_NAMES_ZH = {0: "下跌", 1: "盤整", 2: "上漲"}
 FORECAST_HORIZON = "未來五個交易日"
 MIN_PREDICTION_CONFIDENCE = 0.40
 MIN_TOP_PROBABILITY_MARGIN = 0.05
+MAX_FORWARD_RECORD_STALENESS_DAYS = 3
 
 
 def _valid_price_rows(price: pd.DataFrame) -> pd.DataFrame:
@@ -61,14 +61,20 @@ def build_v2_features(
 
 
 def _cached_paths(stock_id: str) -> dict[str, Path]:
-    live_paths = {
-        name: LIVE_DIR / f"{stock_id}_{name}.csv"
-        for name in ("price", "institutional", "margin")
-    }
-    if all(path.exists() for path in live_paths.values()):
-        return live_paths
+    for directory in (
+        LIVE_DIR,
+        RAW_DIR,
+        Path("data/external_validation"),
+        Path("data/stock_models"),
+    ):
+        paths = {
+            name: directory / f"{stock_id}_{name}.csv"
+            for name in ("price", "institutional", "margin")
+        }
+        if all(path.exists() for path in paths.values()):
+            return paths
     return {
-        name: RAW_DIR / f"{stock_id}_{name}.csv"
+        name: LIVE_DIR / f"{stock_id}_{name}.csv"
         for name in ("price", "institutional", "margin")
     }
 
@@ -203,6 +209,7 @@ def build_report(
     model_path: Path,
     source: str,
     requested_as_of: str,
+    model_info: dict | None = None,
 ) -> dict:
     model_features = _feature_columns("v2")
     frame = feature_frame.copy()
@@ -219,9 +226,23 @@ def build_report(
     model.load_model(model_path)
     model_input = complete.tail(1)[model_features].astype(float)
     probabilities = model.predict_proba(model_input)[0]
+    model_info = model_info or {
+        "version": "v2",
+        "artifact_id": "2330_v2_legacy",
+        "status": "research_champion",
+    }
     predicted_class, trend, abstained, probability_margin = _prediction_label(
         probabilities
     )
+    abstention_reasons = []
+    if probabilities[predicted_class] < MIN_PREDICTION_CONFIDENCE:
+        abstention_reasons.append("最高類別機率低於 40%")
+    if probability_margin < MIN_TOP_PROBABILITY_MARGIN:
+        abstention_reasons.append("前兩名類別機率差低於 5%")
+    if not model_info.get("direction_signal_eligible", True):
+        abstained = True
+        trend = "不確定"
+        abstention_reasons.append("此股票模型未通過歷史方向訊號品質門檻")
     prediction_date = latest["date"].date()
     requested_date = date.fromisoformat(requested_as_of)
     stale_days = max((requested_date - prediction_date).days, 0)
@@ -234,16 +255,26 @@ def build_report(
         "data_staleness_calendar_days": stale_days,
         "stale_data_warning": stale_days > 7,
         "model": {
-            "version": "v2",
+            "version": model_info["version"],
+            "artifact_id": model_info.get("artifact_id", model_info["version"]),
             "path": str(model_path),
             "target": FORECAST_HORIZON,
-            "status": "research_champion",
+            "status": model_info["status"],
+            "trained_on": model_info.get("trained_on"),
+            "training_end": model_info.get("training_end"),
+            "walk_forward_mean_balanced_accuracy": model_info.get(
+                "walk_forward_mean_balanced_accuracy"
+            ),
+            "direction_signal_eligible": model_info.get(
+                "direction_signal_eligible", True
+            ),
         },
         "prediction": {
             "class_id": predicted_class,
             "raw_top_class": CLASS_NAMES_ZH[predicted_class],
             "trend": trend,
             "abstained": abstained,
+            "abstention_reasons": abstention_reasons,
             "confidence": float(probabilities[predicted_class]),
             "top_probability_margin": probability_margin,
             "abstention_policy": {
@@ -265,7 +296,7 @@ def build_report(
         "factor_summary": factors,
         "limitations": [
             "因素摘要是規則式觀察，不是模型的因果解釋或 SHAP 歸因。",
-            "V2 是研究 champion，尚未通過全新的即時 forward 驗證。",
+            "此模型尚未通過建置日之後的全新 forward 驗證。",
             "內容僅供研究，不構成投資建議。",
         ],
     }
@@ -293,7 +324,7 @@ def render_markdown(report: dict) -> str:
     ]
     if prediction.get("abstained"):
         lines.append(
-            "- 判斷說明：最高機率或領先差距不足，系統選擇不給方向訊號"
+            "- 判斷說明：" + "；".join(prediction["abstention_reasons"])
         )
     if report["stale_data_warning"]:
         lines.extend([
@@ -316,6 +347,14 @@ def render_markdown(report: dict) -> str:
 
 def record_forward_prediction(report: dict, path: Path | None = None) -> Path:
     """Append one immutable daily prediction for later forward evaluation."""
+    if (
+        report["data_staleness_calendar_days"]
+        > MAX_FORWARD_RECORD_STALENESS_DAYS
+    ):
+        raise ValueError(
+            "Refusing to record a stale forward prediction: "
+            f"{report['data_staleness_calendar_days']} calendar days old"
+        )
     path = path or FORWARD_DIR / f"{report['stock_id']}_predictions.csv"
     prediction = report["prediction"]
     probabilities = prediction["probabilities"]
@@ -323,7 +362,7 @@ def record_forward_prediction(report: dict, path: Path | None = None) -> Path:
         "prediction_date": report["prediction_date"],
         "recorded_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "stock_id": report["stock_id"],
-        "model_version": report["model"]["version"],
+        "model_version": report["model"]["artifact_id"],
         "close": report["market_snapshot"]["close"],
         "raw_top_class": prediction["raw_top_class"],
         "trend": prediction["trend"],
@@ -355,17 +394,25 @@ def analyze(
     as_of: str | None = None,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
 ) -> tuple[dict, Path, Path]:
-    if stock_id not in SUPPORTED_MODEL_STOCKS:
-        raise ValueError(
-            f"No validated stock-specific champion for {stock_id}; "
-            f"currently supported: {sorted(SUPPORTED_MODEL_STOCKS)}"
-        )
     as_of = as_of or date.today().isoformat()
     registry = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
-    champion = registry["champion"]
-    if champion["version"] != "v2":
-        raise ValueError(f"Unsupported registered champion: {champion['version']}")
-    model_path = Path(champion["model_path"])
+    stock_models = registry.get("stock_models", {})
+    if stock_id in stock_models:
+        model_info = stock_models[stock_id]
+    elif stock_id == "2330":
+        champion = registry["champion"]
+        model_info = {
+            **champion,
+            "artifact_id": "2330_v2_legacy",
+        }
+    else:
+        available = sorted(stock_models) or ["2330"]
+        raise ValueError(
+            f"No stock-specific model for {stock_id}; currently supported: {available}"
+        )
+    if model_info["version"] != "v2":
+        raise ValueError(f"Unsupported stock model version: {model_info['version']}")
+    model_path = Path(model_info["model_path"])
     if refresh:
         frames, source = fetch_latest_inputs(
             stock_id,
@@ -377,7 +424,9 @@ def analyze(
     features = build_v2_features(
         frames["price"], frames["institutional"], frames["margin"],
     )
-    report = build_report(stock_id, features, model_path, source, as_of)
+    report = build_report(
+        stock_id, features, model_path, source, as_of, model_info,
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
     json_path = output_dir / f"{stock_id}_latest.json"
     markdown_path = output_dir / f"{stock_id}_latest.md"

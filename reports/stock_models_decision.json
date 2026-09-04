@@ -1,0 +1,103 @@
+{
+  "version": "stock_specific_v2_forward_models",
+  "status": "research_forward_evaluation",
+  "stocks": [
+    "2330",
+    "2454",
+    "2317",
+    "2308",
+    "2881"
+  ],
+  "feature_version": "v2",
+  "validation_years": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "tree_selection": "median zero-based best iteration plus one",
+  "test_period_used_for_hyperparameter_selection": false,
+  "models": {
+    "2330": {
+      "version": "v2",
+      "artifact_id": "2330_v2_forward_20260905",
+      "status": "research_champion_forward_refit",
+      "model_path": "models/stocks/2330_v2_forward.json",
+      "feature_count": 26,
+      "n_estimators": 4,
+      "training_start": "2018-01-02",
+      "training_end": "2026-08-17",
+      "trained_on": "2026-09-05",
+      "walk_forward_mean_balanced_accuracy": 0.36365495880257914,
+      "walk_forward_mean_macro_f1": 0.30257931144167066,
+      "balanced_accuracy_winning_folds": 3,
+      "direction_signal_eligible": true,
+      "warning": "Fresh forward evidence is required; not investment-ready."
+    },
+    "2454": {
+      "version": "v2",
+      "artifact_id": "2454_v2_forward_20260905",
+      "status": "research_baseline_forward_refit",
+      "model_path": "models/stocks/2454_v2_forward.json",
+      "feature_count": 26,
+      "n_estimators": 4,
+      "training_start": "2018-01-02",
+      "training_end": "2026-08-17",
+      "trained_on": "2026-09-05",
+      "walk_forward_mean_balanced_accuracy": 0.3323562905096111,
+      "walk_forward_mean_macro_f1": 0.3027902148317993,
+      "balanced_accuracy_winning_folds": 3,
+      "direction_signal_eligible": false,
+      "warning": "Fresh forward evidence is required; not investment-ready."
+    },
+    "2317": {
+      "version": "v2",
+      "artifact_id": "2317_v2_forward_20260905",
+      "status": "research_baseline_forward_refit",
+      "model_path": "models/stocks/2317_v2_forward.json",
+      "feature_count": 26,
+      "n_estimators": 24,
+      "training_start": "2018-01-02",
+      "training_end": "2026-08-17",
+      "trained_on": "2026-09-05",
+      "walk_forward_mean_balanced_accuracy": 0.3944048995651675,
+      "walk_forward_mean_macro_f1": 0.3841108080457779,
+      "balanced_accuracy_winning_folds": 4,
+      "direction_signal_eligible": true,
+      "warning": "Fresh forward evidence is required; not investment-ready."
+    },
+    "2308": {
+      "version": "v2",
+      "artifact_id": "2308_v2_forward_20260905",
+      "status": "research_baseline_forward_refit",
+      "model_path": "models/stocks/2308_v2_forward.json",
+      "feature_count": 26,
+      "n_estimators": 2,
+      "training_start": "2018-01-02",
+      "training_end": "2026-08-28",
+      "trained_on": "2026-09-05",
+      "walk_forward_mean_balanced_accuracy": 0.3548894282524382,
+      "walk_forward_mean_macro_f1": 0.3302983453260019,
+      "balanced_accuracy_winning_folds": 4,
+      "direction_signal_eligible": true,
+      "warning": "Fresh forward evidence is required; not investment-ready."
+    },
+    "2881": {
+      "version": "v2",
+      "artifact_id": "2881_v2_forward_20260905",
+      "status": "research_baseline_forward_refit",
+      "model_path": "models/stocks/2881_v2_forward.json",
+      "feature_count": 26,
+      "n_estimators": 13,
+      "training_start": "2018-01-02",
+      "training_end": "2026-08-17",
+      "trained_on": "2026-09-05",
+      "walk_forward_mean_balanced_accuracy": 0.37792325021894707,
+      "walk_forward_mean_macro_f1": 0.3437724250842427,
+      "balanced_accuracy_winning_folds": 4,
+      "direction_signal_eligible": true,
+      "warning": "Fresh forward evidence is required; not investment-ready."
+    }
+  },
+  "warning": "Models were refit on all labels available at build time and are only eligible for predictions after their trained_on date."
+}

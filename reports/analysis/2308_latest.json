@@ -1,0 +1,68 @@
+{
+  "stock_id": "2308",
+  "prediction_date": "2026-09-04",
+  "requested_as_of": "2026-09-05",
+  "data_source": "cache",
+  "data_staleness_calendar_days": 1,
+  "stale_data_warning": false,
+  "model": {
+    "version": "v2",
+    "artifact_id": "2308_v2_forward_20260905",
+    "path": "models\\stocks\\2308_v2_forward.json",
+    "target": "未來五個交易日",
+    "status": "research_baseline_forward_refit",
+    "trained_on": "2026-09-05",
+    "training_end": "2026-08-28",
+    "walk_forward_mean_balanced_accuracy": 0.3548894282524382,
+    "direction_signal_eligible": true
+  },
+  "prediction": {
+    "class_id": 0,
+    "raw_top_class": "下跌",
+    "trend": "不確定",
+    "abstained": true,
+    "abstention_reasons": [
+      "最高類別機率低於 40%",
+      "前兩名類別機率差低於 5%"
+    ],
+    "confidence": 0.33430448174476624,
+    "top_probability_margin": 0.0005588233470916748,
+    "abstention_policy": {
+      "minimum_confidence": 0.4,
+      "minimum_top_probability_margin": 0.05
+    },
+    "probabilities": {
+      "down": 0.33430448174476624,
+      "neutral": 0.3319498598575592,
+      "up": 0.33374565839767456
+    }
+  },
+  "market_snapshot": {
+    "close": 1825.0,
+    "rsi_14": 53.00378774031006,
+    "return_5d_past": -0.002732240437158473,
+    "volume_ratio_20": 0.8282523134349562
+  },
+  "factor_summary": {
+    "technical_view": "中性",
+    "chip_view": "中性",
+    "technical_observations": [
+      "收盤價高於 20 日均價 1.50%",
+      "MACD 柱狀體為正",
+      "近五日報酬為 -0.27%"
+    ],
+    "chip_observations": [
+      "外資近五日淨賣超 3,741,056",
+      "投信近五日淨賣超 594,082",
+      "三大法人當日合計買超 1,794,987"
+    ],
+    "risks": [
+      "ATR 約為股價的 4.38%，波動偏高"
+    ]
+  },
+  "limitations": [
+    "因素摘要是規則式觀察，不是模型的因果解釋或 SHAP 歸因。",
+    "此模型尚未通過建置日之後的全新 forward 驗證。",
+    "內容僅供研究，不構成投資建議。"
+  ]
+}

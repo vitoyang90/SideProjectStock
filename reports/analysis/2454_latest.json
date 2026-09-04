@@ -1,0 +1,69 @@
+{
+  "stock_id": "2454",
+  "prediction_date": "2026-09-04",
+  "requested_as_of": "2026-09-05",
+  "data_source": "cache",
+  "data_staleness_calendar_days": 1,
+  "stale_data_warning": false,
+  "model": {
+    "version": "v2",
+    "artifact_id": "2454_v2_forward_20260905",
+    "path": "models\\stocks\\2454_v2_forward.json",
+    "target": "未來五個交易日",
+    "status": "research_baseline_forward_refit",
+    "trained_on": "2026-09-05",
+    "training_end": "2026-08-17",
+    "walk_forward_mean_balanced_accuracy": 0.3323562905096111,
+    "direction_signal_eligible": false
+  },
+  "prediction": {
+    "class_id": 0,
+    "raw_top_class": "下跌",
+    "trend": "不確定",
+    "abstained": true,
+    "abstention_reasons": [
+      "最高類別機率低於 40%",
+      "前兩名類別機率差低於 5%",
+      "此股票模型未通過歷史方向訊號品質門檻"
+    ],
+    "confidence": 0.3385787904262543,
+    "top_probability_margin": 0.0016242265701293945,
+    "abstention_policy": {
+      "minimum_confidence": 0.4,
+      "minimum_top_probability_margin": 0.05
+    },
+    "probabilities": {
+      "down": 0.3385787904262543,
+      "neutral": 0.32446667551994324,
+      "up": 0.3369545638561249
+    }
+  },
+  "market_snapshot": {
+    "close": 4415.0,
+    "rsi_14": 63.995952856847474,
+    "return_5d_past": 0.10790464240903397,
+    "volume_ratio_20": 1.0555954677469075
+  },
+  "factor_summary": {
+    "technical_view": "偏多",
+    "chip_view": "中性",
+    "technical_observations": [
+      "收盤價高於 20 日均價 10.01%",
+      "MACD 柱狀體為正",
+      "近五日報酬為 10.79%"
+    ],
+    "chip_observations": [
+      "外資近五日淨賣超 467,774",
+      "投信近五日淨買超 1,313,512",
+      "三大法人當日合計買超 977,157"
+    ],
+    "risks": [
+      "ATR 約為股價的 4.11%，波動偏高"
+    ]
+  },
+  "limitations": [
+    "因素摘要是規則式觀察，不是模型的因果解釋或 SHAP 歸因。",
+    "此模型尚未通過建置日之後的全新 forward 驗證。",
+    "內容僅供研究，不構成投資建議。"
+  ]
+}

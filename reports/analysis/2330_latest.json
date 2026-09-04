@@ -1,31 +1,40 @@
 {
   "stock_id": "2330",
   "prediction_date": "2026-09-04",
-  "requested_as_of": "2026-09-04",
+  "requested_as_of": "2026-09-05",
   "data_source": "cache",
-  "data_staleness_calendar_days": 0,
+  "data_staleness_calendar_days": 1,
   "stale_data_warning": false,
   "model": {
     "version": "v2",
-    "path": "models\\xgboost_v2.json",
+    "artifact_id": "2330_v2_forward_20260905",
+    "path": "models\\stocks\\2330_v2_forward.json",
     "target": "未來五個交易日",
-    "status": "research_champion"
+    "status": "research_champion_forward_refit",
+    "trained_on": "2026-09-05",
+    "training_end": "2026-08-17",
+    "walk_forward_mean_balanced_accuracy": 0.36365495880257914,
+    "direction_signal_eligible": true
   },
   "prediction": {
-    "class_id": 2,
-    "raw_top_class": "上漲",
+    "class_id": 1,
+    "raw_top_class": "盤整",
     "trend": "不確定",
     "abstained": true,
-    "confidence": 0.337189257144928,
-    "top_probability_margin": 0.0011550188064575195,
+    "abstention_reasons": [
+      "最高類別機率低於 40%",
+      "前兩名類別機率差低於 5%"
+    ],
+    "confidence": 0.34030094742774963,
+    "top_probability_margin": 0.006562709808349609,
     "abstention_policy": {
       "minimum_confidence": 0.4,
       "minimum_top_probability_margin": 0.05
     },
     "probabilities": {
-      "down": 0.33603423833847046,
-      "neutral": 0.3267764747142792,
-      "up": 0.337189257144928
+      "down": 0.32596084475517273,
+      "neutral": 0.34030094742774963,
+      "up": 0.3337382376194
     }
   },
   "market_snapshot": {
@@ -53,7 +62,7 @@
   },
   "limitations": [
     "因素摘要是規則式觀察，不是模型的因果解釋或 SHAP 歸因。",
-    "V2 是研究 champion，尚未通過全新的即時 forward 驗證。",
+    "此模型尚未通過建置日之後的全新 forward 驗證。",
     "內容僅供研究，不構成投資建議。"
   ]
 }

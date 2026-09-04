@@ -3,3 +3,6 @@ pandas>=3.0,<4
 requests>=2.34,<3
 scikit-learn>=1.7,<2
 xgboost>=3.0,<4
+fastapi>=0.115,<1
+httpx>=0.28,<1
+uvicorn[standard]>=0.34,<1
