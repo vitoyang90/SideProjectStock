@@ -133,5 +133,10 @@
       "direction_signal_eligible": true,
       "warning": "Fresh forward evidence is required; not investment-ready."
     }
+  },
+  "v21_experiment": {
+    "status": "completed",
+    "decision_path": "reports/v21_decision.json",
+    "promoted_stocks": []
   }
 }

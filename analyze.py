@@ -222,15 +222,24 @@ def build_report(
         raise ValueError("No row has all V2 inference features")
     latest = complete.iloc[-1]
 
-    model = XGBClassifier()
-    model.load_model(model_path)
     model_input = complete.tail(1)[model_features].astype(float)
-    probabilities = model.predict_proba(model_input)[0]
     model_info = model_info or {
         "version": "v2",
         "artifact_id": "2330_v2_legacy",
         "status": "research_champion",
     }
+    model_family = model_info.get("model_family", "xgboost")
+    if model_family == "xgboost":
+        model = XGBClassifier()
+        model.load_model(model_path)
+        probabilities = model.predict_proba(model_input)[0]
+    elif model_family == "lightgbm":
+        import lightgbm as lgb
+
+        model = lgb.Booster(model_file=str(model_path))
+        probabilities = model.predict(model_input)[0]
+    else:
+        raise ValueError(f"Unsupported model family: {model_family}")
     predicted_class, trend, abstained, probability_margin = _prediction_label(
         probabilities
     )
@@ -257,6 +266,7 @@ def build_report(
         "model": {
             "version": model_info["version"],
             "artifact_id": model_info.get("artifact_id", model_info["version"]),
+            "family": model_family,
             "path": str(model_path),
             "target": FORECAST_HORIZON,
             "status": model_info["status"],

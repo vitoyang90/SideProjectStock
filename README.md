@@ -15,6 +15,24 @@
 
 每個版本都使用相同的日期切分、XGBoost 參數與評估指標，方便比較新增資料是否真的有效。
 
+版本不是強制累加。每一組新資料都先從當時的 champion 建立單一變因 candidate，
+通過預先固定的 walk-forward gate 才替換 champion；失敗特徵不會帶進下一版。
+
+```text
+V1 技術面
+  ↓
+V2 技術面＋籌碼面（目前研究 champion）
+  ├─ ＋基本面 → rejected
+  ├─ ＋市場環境 → rejected
+  ├─ ＋新聞活動 → rejected
+  ├─ ＋新聞情緒 → future candidate
+  ├─ ＋法說會／財報文字 → future candidate
+  └─ ＋社群情緒 → future candidate
+```
+
+V6～V8 是資料模組 roadmap，不代表必須把先前失敗的特徵全部累加。完整多模態層
+只整合已通過 gate 的訊號，LLM 負責報告整理而不直接猜測股價。
+
 ## V5 新聞資料層
 
 V5 先完成資料收集與 point-in-time 特徵，不變更目前的 V2 champion，也不使用
@@ -179,6 +197,28 @@ V2-market 的平均 Balanced Accuracy 與 Macro F1 分別提升 1.85 與 1.13 �
 - `reports/stock_models_walk_forward_folds.csv`：逐股票、逐年度結果
 - `reports/stock_models_summary.csv`：各股票四年摘要
 - `reports/stock_models_decision.json`：模型來源與使用限制
+
+### V2.1 nested 模型搜尋
+
+V2.1 不增加新的資料面向，先改善核心模型。候選包含固定 `±1.5%`、依當時波動率
+調整、以及只由訓練資料估計的絕對報酬分位數三種標籤；模型比較原始 XGBoost、
+兩個較保守的 XGBoost，以及兩個 LightGBM。無論候選用何種訓練標籤，驗證都用
+相同的固定 `±1.5%` 目標計分，避免因更換題目而得到不可比較的準確率。
+
+```powershell
+.\.venv\Scripts\python.exe train_v21.py
+```
+
+模型選擇使用 nested walk-forward：只用外層年份以前的結果選擇候選，再評估
+2022～2024。五檔都沒有完整通過預先設定的分類穩定性與扣成本報酬 gate，因此
+沒有替換任何現行 V2 模型。2308 與 2881 的 Balanced Accuracy 和回測改善，
+但 Macro F1 仍退步；2317 的最佳選擇就是原始 V2。
+
+- `reports/v21_label_diagnostics.csv`：逐股票與年度的標籤分布
+- `reports/v21_candidate_folds.csv`：全部候選的共同目標評估
+- `reports/v21_nested_selections.csv`：每個外層年度的事前選擇與結果
+- `reports/v21_decision.json`：逐股票 gate 與最終決策
+- `models/v21_candidates/`：失敗候選的可重現模型，不供正式推論
 
 ### FastAPI
 

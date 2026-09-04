@@ -1,0 +1,149 @@
+{
+  "version": "v2.1_nested_search",
+  "status": "completed",
+  "canonical_evaluation_target": "fixed symmetric +/-1.5% five-day return",
+  "candidate_label_policies": [
+    "fixed",
+    "volatility",
+    "train_quantile"
+  ],
+  "candidate_models": [
+    "xgb_baseline",
+    "xgb_shallow",
+    "xgb_conservative",
+    "lgb_small",
+    "lgb_medium"
+  ],
+  "selection_score": "mean balanced accuracy + mean macro F1 - 0.25 * their std sum",
+  "outer_years": [
+    2022,
+    2023,
+    2024
+  ],
+  "test_period_used_for_selection": false,
+  "promotion_policy": {
+    "required_metric_wins": 2,
+    "outer_folds": 3,
+    "maximum_allowed_single_fold_degradation": 0.03,
+    "net_return_must_improve": true,
+    "all_checks_must_pass": true
+  },
+  "stock_decisions": {
+    "2330": {
+      "passes_gate": false,
+      "status": "rejected",
+      "selected_candidate": "fixed__xgb_shallow",
+      "family": "xgboost",
+      "label_policy": "fixed",
+      "quantile_threshold_if_applicable": null,
+      "n_estimators": 19,
+      "candidate_model_path": "models/v21_candidates/2330_v21_candidate.json",
+      "gate_checks": {
+        "mean_balanced_accuracy_improved": false,
+        "mean_macro_f1_improved": true,
+        "balanced_accuracy_wins_at_least_2_of_3": true,
+        "macro_f1_wins_at_least_2_of_3": true,
+        "worst_balanced_accuracy_delta_at_least_minus_0_03": false,
+        "worst_macro_f1_delta_at_least_minus_0_03": false,
+        "net_return_improved_after_costs": false
+      },
+      "nested_mean_delta_balanced_accuracy": -0.014573339007409794,
+      "nested_mean_delta_macro_f1": 0.03177848108439577,
+      "nested_net_return": 0.0866731705919801,
+      "baseline_net_return": 0.11210362770758486
+    },
+    "2454": {
+      "passes_gate": false,
+      "status": "rejected",
+      "selected_candidate": "train_quantile__lgb_small",
+      "family": "lightgbm",
+      "label_policy": "train_quantile",
+      "quantile_threshold_if_applicable": 0.0192307692307691,
+      "n_estimators": 2,
+      "candidate_model_path": "models/v21_candidates/2454_v21_candidate.txt",
+      "gate_checks": {
+        "mean_balanced_accuracy_improved": false,
+        "mean_macro_f1_improved": true,
+        "balanced_accuracy_wins_at_least_2_of_3": true,
+        "macro_f1_wins_at_least_2_of_3": false,
+        "worst_balanced_accuracy_delta_at_least_minus_0_03": true,
+        "worst_macro_f1_delta_at_least_minus_0_03": false,
+        "net_return_improved_after_costs": false
+      },
+      "nested_mean_delta_balanced_accuracy": -0.001796979899067593,
+      "nested_mean_delta_macro_f1": 0.0011016712405320002,
+      "nested_net_return": -0.5241458898756952,
+      "baseline_net_return": -0.4904187370909334
+    },
+    "2317": {
+      "passes_gate": false,
+      "status": "rejected",
+      "selected_candidate": "fixed__xgb_baseline",
+      "family": "xgboost",
+      "label_policy": "fixed",
+      "quantile_threshold_if_applicable": null,
+      "n_estimators": 24,
+      "candidate_model_path": "models/v21_candidates/2317_v21_candidate.json",
+      "gate_checks": {
+        "mean_balanced_accuracy_improved": false,
+        "mean_macro_f1_improved": false,
+        "balanced_accuracy_wins_at_least_2_of_3": false,
+        "macro_f1_wins_at_least_2_of_3": false,
+        "worst_balanced_accuracy_delta_at_least_minus_0_03": true,
+        "worst_macro_f1_delta_at_least_minus_0_03": true,
+        "net_return_improved_after_costs": false
+      },
+      "nested_mean_delta_balanced_accuracy": 0.0,
+      "nested_mean_delta_macro_f1": 0.0,
+      "nested_net_return": 0.4001035431450197,
+      "baseline_net_return": 0.4001035431450197
+    },
+    "2308": {
+      "passes_gate": false,
+      "status": "rejected",
+      "selected_candidate": "train_quantile__xgb_shallow",
+      "family": "xgboost",
+      "label_policy": "train_quantile",
+      "quantile_threshold_if_applicable": 0.016968499111356193,
+      "n_estimators": 30,
+      "candidate_model_path": "models/v21_candidates/2308_v21_candidate.json",
+      "gate_checks": {
+        "mean_balanced_accuracy_improved": true,
+        "mean_macro_f1_improved": false,
+        "balanced_accuracy_wins_at_least_2_of_3": true,
+        "macro_f1_wins_at_least_2_of_3": false,
+        "worst_balanced_accuracy_delta_at_least_minus_0_03": true,
+        "worst_macro_f1_delta_at_least_minus_0_03": false,
+        "net_return_improved_after_costs": true
+      },
+      "nested_mean_delta_balanced_accuracy": 0.019858509446942802,
+      "nested_mean_delta_macro_f1": -0.0021105243893295524,
+      "nested_net_return": 0.12463318391674205,
+      "baseline_net_return": -0.040962036639462074
+    },
+    "2881": {
+      "passes_gate": false,
+      "status": "rejected",
+      "selected_candidate": "fixed__xgb_conservative",
+      "family": "xgboost",
+      "label_policy": "fixed",
+      "quantile_threshold_if_applicable": null,
+      "n_estimators": 26,
+      "candidate_model_path": "models/v21_candidates/2881_v21_candidate.json",
+      "gate_checks": {
+        "mean_balanced_accuracy_improved": true,
+        "mean_macro_f1_improved": false,
+        "balanced_accuracy_wins_at_least_2_of_3": true,
+        "macro_f1_wins_at_least_2_of_3": true,
+        "worst_balanced_accuracy_delta_at_least_minus_0_03": true,
+        "worst_macro_f1_delta_at_least_minus_0_03": false,
+        "net_return_improved_after_costs": true
+      },
+      "nested_mean_delta_balanced_accuracy": 0.014005779263875492,
+      "nested_mean_delta_macro_f1": -0.005509140684684795,
+      "nested_net_return": 0.004891797338837378,
+      "baseline_net_return": -0.24185861507637751
+    }
+  },
+  "warning": "Historical nested validation can select candidates, but only data after the build date can supply fresh promotion evidence."
+}
