@@ -1,0 +1,62 @@
+{
+  "version": "v5_news",
+  "status": "rejected_historical_walk_forward",
+  "passes_gate": false,
+  "comparison": "V2 versus V2 plus frozen news activity features",
+  "matched_model_start": "2021-01-01",
+  "validation_years": [
+    2022,
+    2023,
+    2024
+  ],
+  "test_period_used_for_selection": false,
+  "schema_version": "v5_news_activity_1",
+  "schema_sha256": "2da7aec07330dc2c66fe040eea4741dfc532acf81812b7352d8a41be6a4a6f0d",
+  "news_features": [
+    "news_count",
+    "news_source_count",
+    "news_after_close_count",
+    "news_title_chars_mean",
+    "news_count_3d",
+    "news_count_5d"
+  ],
+  "gate_policy": {
+    "required_fold_wins": 2,
+    "folds": 3,
+    "maximum_allowed_single_fold_degradation": 0.03,
+    "all_checks_must_pass": true
+  },
+  "gate_checks": {
+    "mean_balanced_accuracy_improved": false,
+    "mean_macro_f1_improved": true,
+    "balanced_accuracy_wins_at_least_2_of_3": false,
+    "macro_f1_wins_at_least_2_of_3": true,
+    "worst_balanced_accuracy_delta_at_least_minus_0_03": false,
+    "worst_macro_f1_delta_at_least_minus_0_03": false,
+    "net_return_improved_after_costs": false
+  },
+  "v5_delta_vs_v2": {
+    "mean_balanced_accuracy": -0.012530424737888513,
+    "mean_macro_f1": 0.0014999097157933905,
+    "mean_mlogloss": -5.996227264404297e-05,
+    "net_total_return": -0.22253311403301035
+  },
+  "fold_deltas": [
+    {
+      "validation_year": 2022,
+      "delta_balanced_accuracy": -0.005381867582897548,
+      "delta_macro_f1": 0.028722198468159876
+    },
+    {
+      "validation_year": 2023,
+      "delta_balanced_accuracy": 0.047878873771730945,
+      "delta_macro_f1": 0.04860417904535552
+    },
+    {
+      "validation_year": 2024,
+      "delta_balanced_accuracy": -0.08008828040249882,
+      "delta_macro_f1": -0.07282664836613523
+    }
+  ],
+  "warning": "Historical research only. Even a passing result requires fresh forward data before promotion to champion."
+}

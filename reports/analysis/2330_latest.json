@@ -1,0 +1,59 @@
+{
+  "stock_id": "2330",
+  "prediction_date": "2026-09-04",
+  "requested_as_of": "2026-09-04",
+  "data_source": "cache",
+  "data_staleness_calendar_days": 0,
+  "stale_data_warning": false,
+  "model": {
+    "version": "v2",
+    "path": "models\\xgboost_v2.json",
+    "target": "未來五個交易日",
+    "status": "research_champion"
+  },
+  "prediction": {
+    "class_id": 2,
+    "raw_top_class": "上漲",
+    "trend": "不確定",
+    "abstained": true,
+    "confidence": 0.337189257144928,
+    "top_probability_margin": 0.0011550188064575195,
+    "abstention_policy": {
+      "minimum_confidence": 0.4,
+      "minimum_top_probability_margin": 0.05
+    },
+    "probabilities": {
+      "down": 0.33603423833847046,
+      "neutral": 0.3267764747142792,
+      "up": 0.337189257144928
+    }
+  },
+  "market_snapshot": {
+    "close": 2410.0,
+    "rsi_14": 52.34853514080075,
+    "return_5d_past": -0.004132231404958664,
+    "volume_ratio_20": 0.7085523612919454
+  },
+  "factor_summary": {
+    "technical_view": "中性",
+    "chip_view": "中性",
+    "technical_observations": [
+      "收盤價高於 20 日均價 0.45%",
+      "MACD 柱狀體為正",
+      "近五日報酬為 -0.41%"
+    ],
+    "chip_observations": [
+      "外資近五日淨賣超 9,886,030",
+      "投信近五日淨賣超 1,964,698",
+      "三大法人當日合計買超 1,969,801"
+    ],
+    "risks": [
+      "模型信心與歷史回測不代表未來績效"
+    ]
+  },
+  "limitations": [
+    "因素摘要是規則式觀察，不是模型的因果解釋或 SHAP 歸因。",
+    "V2 是研究 champion，尚未通過全新的即時 forward 驗證。",
+    "內容僅供研究，不構成投資建議。"
+  ]
+}

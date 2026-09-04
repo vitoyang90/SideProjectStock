@@ -138,6 +138,9 @@ dataset_df = add_technical_features(dataset_df)
 dataset_df = add_5day_direction_label(dataset_df)
 dataset_df = add_5day_three_class_label(dataset_df, threshold=0.02)
 
+processed_output_path = Path("data/processed") / f"{stock_id}_dataset.csv"
+processed_output_path.parent.mkdir(parents=True, exist_ok=True)
+
 preview_columns = [
     "date",
     "close",

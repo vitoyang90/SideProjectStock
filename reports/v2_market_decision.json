@@ -1,0 +1,71 @@
+{
+  "version": "v2_market",
+  "status": "rejected_historical_walk_forward",
+  "passes_gate": false,
+  "comparison": "V2 versus V2 plus market context",
+  "validation_years": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "test_period_used_for_selection": false,
+  "market_features": [
+    "taiex_return_1d",
+    "taiex_return_5d",
+    "spy_return_1d",
+    "spy_return_5d",
+    "qqq_return_1d",
+    "qqq_return_5d",
+    "soxx_return_1d",
+    "soxx_return_5d",
+    "usd_twd",
+    "usd_twd_change_1d",
+    "us10y_yield",
+    "us10y_change_1d"
+  ],
+  "gate_policy": {
+    "required_fold_wins": 3,
+    "folds": 4,
+    "maximum_allowed_single_fold_degradation": 0.03,
+    "all_checks_must_pass": true
+  },
+  "gate_checks": {
+    "mean_balanced_accuracy_improved": true,
+    "mean_macro_f1_improved": true,
+    "balanced_accuracy_wins_at_least_3_of_4": false,
+    "macro_f1_wins_at_least_3_of_4": false,
+    "worst_balanced_accuracy_delta_at_least_minus_0_03": false,
+    "worst_macro_f1_delta_at_least_minus_0_03": false,
+    "net_return_improved_after_costs": false
+  },
+  "candidate_delta_vs_v2": {
+    "mean_balanced_accuracy": 0.0184591692976408,
+    "mean_macro_f1": 0.011278459258882101,
+    "mean_mlogloss": -0.010159909725189209,
+    "net_total_return": -0.020910506222863168
+  },
+  "fold_deltas": [
+    {
+      "validation_year": 2021,
+      "delta_balanced_accuracy": -0.047062641999350785,
+      "delta_macro_f1": -0.02844901367549224
+    },
+    {
+      "validation_year": 2022,
+      "delta_balanced_accuracy": 0.05534949305801218,
+      "delta_macro_f1": 0.12158874209889303
+    },
+    {
+      "validation_year": 2023,
+      "delta_balanced_accuracy": 0.09260440287226002,
+      "delta_macro_f1": -0.05480551152154359
+    },
+    {
+      "validation_year": 2024,
+      "delta_balanced_accuracy": -0.02705457674035827,
+      "delta_macro_f1": 0.006779620133671338
+    }
+  ],
+  "warning": "Historical research only. A passing result requires fresh forward data before promotion to champion."
+}

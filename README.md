@@ -10,7 +10,8 @@
 | V2 | V1 + 籌碼面 |
 | V3 | V2 + 基本面 |
 | V4 | V3 + 市場環境 |
-| V5（資料層） | V4 + 新聞活動特徵；尚未加入模型選拔 |
+| V5 | V2 + 新聞活動特徵；歷史 walk-forward 未通過升版門檻 |
+| V2-market | V2 + 市場環境；歷史 walk-forward 未通過升版門檻 |
 
 每個版本都使用相同的日期切分、XGBoost 參數與評估指標，方便比較新增資料是否真的有效。
 
@@ -98,6 +99,71 @@ PSI 漂移。摘要欄位若持續缺失會從凍結特徵中排除，避免將�
 - `reports/news_audit_zero_streaks.csv`：連續零新聞交易日
 - `reports/news_feature_drift.csv`：各特徵年度 PSI
 - `reports/news_feature_schema_v5.json`：模型比較前凍結的特徵與 SHA-256
+
+### V5 歷史 walk-forward 比較
+
+新聞資料自 2021 年起視為可用，因此 V2 與 V5 都使用相同的 2021 年起始資料，
+依序驗證 2022、2023、2024，避免 V2 因較長訓練歷史取得不公平優勢。V5 在 V2
+的技術面與籌碼面之外，只加入審計後凍結的 6 個新聞活動特徵：
+`news_count`、`news_source_count`、`news_after_close_count`、
+`news_title_chars_mean`、`news_count_3d`、`news_count_5d`。
+
+```powershell
+.\.venv\Scripts\python.exe train_v5_news.py
+```
+
+升版 gate 在執行比較前固定：Balanced Accuracy 與 Macro F1 平均都必須改善、
+兩項指標都至少在 3 個年度中的 2 年勝過 V2、任一年度不得退步超過 3 個百分點，
+且扣除交易成本後的淨報酬必須優於 V2。V5 最終未通過：平均 Balanced Accuracy
+下降 1.25 個百分點，平均 Macro F1 僅增加 0.15 個百分點，2024 年兩項指標分別
+下降 8.01 與 7.28 個百分點；扣成本淨報酬由 matched V2 的 `18.45%` 降至
+`-3.81%`。因此 V2 維持 champion，V5 登記為 rejected。
+
+- `reports/v5_news_walk_forward_folds.csv`：V2／V5 各年度分類結果
+- `reports/v5_news_walk_forward_summary.csv`：三個年度的分類摘要
+- `reports/v5_news_backtest.csv`：扣除交易成本後的整體回測
+- `reports/v5_news_backtest_yearly.csv`：逐年回測結果
+- `reports/v5_news_decision.json`：預先固定 gate 與升版決策
+- `data/processed/v5_news_walk_forward_predictions.csv`：逐日 walk-forward 預測
+
+### V2 + 市場環境增量比較
+
+因完整 V3 已被否決，市場面不再疊加失敗的基本面，而是直接與 V2 champion 做
+單一變因比較。V2-market 加入台股大盤、SPY、QQQ、SOXX、美元兌台幣與美國
+10 年期公債殖利率等 12 個 point-in-time 特徵，驗證期間為 2021～2024：
+
+```powershell
+.\.venv\Scripts\python.exe train_v2_market.py
+```
+
+V2-market 的平均 Balanced Accuracy 與 Macro F1 分別提升 1.85 與 1.13 個百分點，
+但兩項指標都只在 2/4 年勝過 V2，單年退步超出 gate，扣成本淨報酬也由 V2 的
+`22.63%` 降至 `20.53%`。因此 V2-market 登記為 rejected，V2 維持 champion。
+
+- `reports/v2_market_walk_forward_folds.csv`：各年度分類結果
+- `reports/v2_market_walk_forward_summary.csv`：四個年度的分類摘要
+- `reports/v2_market_backtest.csv`：扣成本回測
+- `reports/v2_market_backtest_yearly.csv`：逐年回測
+- `reports/v2_market_decision.json`：gate 與正式決策
+
+## 最新資料分析 CLI
+
+研究 champion 凍結為 V2 後，可用單一入口建立最新分析報告。預設讀取快取；
+加上 `--refresh` 會從 FinMind 更新價格、法人與融資券資料。`--record` 會將當日
+預測保存一次，供未來五個交易日後做真正的 forward 評估：
+
+```powershell
+.\.venv\Scripts\python.exe analyze.py --stock-id 2330 --refresh --record
+```
+
+輸出包含三類機率、技術面與籌碼面觀察、資料新鮮度及風險。當最高機率低於
+`40%`，或前兩名機率差不到 `5%`，系統會輸出「不確定」，不勉強產生方向訊號。
+目前只有 2330 具有已登錄的股票專屬 champion；其他股票會明確拒絕執行，不會
+錯用 2330 模型。
+
+- `reports/analysis/2330_latest.json`：機器可讀分析結果
+- `reports/analysis/2330_latest.md`：人類可讀分析報告
+- `data/forward/2330_predictions.csv`：選擇性 forward 預測紀錄
 
 ## 執行
 
@@ -207,6 +273,8 @@ V1 的五日漲跌門檻預設為 `±1.5%`。這個設定是以 2021～2024
 - Candidate：無
 - Rejected：完整 V3（V2 + 全部基本面）
 - Rejected：V3-lite（V2 + PB），未通過五檔股票外部驗證
+- Rejected：V5-news（V2 + 6 個新聞活動特徵），未通過歷史 walk-forward gate
+- Rejected：V2-market（V2 + 12 個市場特徵），年度穩定性與回測未通過 gate
 
 建立 V3-lite 候選：
 
