@@ -1,0 +1,112 @@
+{
+  "version": "v6_disclosure_text",
+  "status": "ready_for_nested_experiment",
+  "ready_for_training": true,
+  "source": "MOPS official historical material-information API plus TWSE OpenAPI listed-company daily material information",
+  "point_in_time_rule": "usable no earlier than max(published_at, first_observed_at), then next trading date when after 13:30",
+  "training_gate": {
+    "minimum_calendar_span_days_per_stock": 730,
+    "minimum_unique_disclosures_per_stock": 50,
+    "required_complete_history_years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "all_supported_stocks_required": true,
+    "duplicate_ids_required": 0
+  },
+  "snapshots_collected": 1,
+  "per_stock": {
+    "2330": {
+      "unique_disclosures": 171,
+      "first_published_at": "2018-01-08T14:32:53",
+      "last_published_at": "2024-12-30T14:38:45",
+      "calendar_span_days": 2548,
+      "completed_history_years": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "duplicate_ids": 0,
+      "ready": true
+    },
+    "2454": {
+      "unique_disclosures": 146,
+      "first_published_at": "2018-01-08T16:57:19",
+      "last_published_at": "2024-12-10T16:56:09",
+      "calendar_span_days": 2527,
+      "completed_history_years": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "duplicate_ids": 0,
+      "ready": true
+    },
+    "2317": {
+      "unique_disclosures": 74,
+      "first_published_at": "2018-02-13T15:17:32",
+      "last_published_at": "2024-11-14T14:15:06",
+      "calendar_span_days": 2465,
+      "completed_history_years": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "duplicate_ids": 0,
+      "ready": true
+    },
+    "2308": {
+      "unique_disclosures": 320,
+      "first_published_at": "2018-01-10T14:33:51",
+      "last_published_at": "2024-12-31T15:26:17",
+      "calendar_span_days": 2547,
+      "completed_history_years": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "duplicate_ids": 0,
+      "ready": true
+    },
+    "2881": {
+      "unique_disclosures": 114,
+      "first_published_at": "2018-01-09T14:28:58",
+      "last_published_at": "2024-12-10T16:00:41",
+      "calendar_span_days": 2527,
+      "completed_history_years": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "duplicate_ids": 0,
+      "ready": true
+    }
+  },
+  "decision": "freeze_features_then_run_nested_walk_forward",
+  "reason": "The minimum forward history and row-count gates passed."
+}

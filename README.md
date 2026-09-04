@@ -12,6 +12,7 @@
 | V4 | V3 + 市場環境 |
 | V5 | V2 + 新聞活動特徵；歷史 walk-forward 未通過升版門檻 |
 | V2-market | V2 + 市場環境；歷史 walk-forward 未通過升版門檻 |
+| V6-disclosure | V2 + 法說／財報公告文字特徵；五檔歷史 walk-forward 未通過升版門檻 |
 
 每個版本都使用相同的日期切分、XGBoost 參數與評估指標，方便比較新增資料是否真的有效。
 
@@ -32,6 +33,47 @@ V2 技術面＋籌碼面（目前研究 champion）
 
 V6～V8 是資料模組 roadmap，不代表必須把先前失敗的特徵全部累加。完整多模態層
 只整合已通過 gate 的訊號，LLM 負責報告整理而不直接猜測股價。
+
+## V6 法說／財報公告文字
+
+V6 使用公開資訊觀測站的官方歷史重大訊息 API，回補五檔股票 2018～2024 年資料；
+只保留標題含法說會、財務報告、每股盈餘、營收報告、自結、損益、財務業務資訊或
+業績的公告，再取得完整說明。歷史資料以官方發言日期與時間作為 point-in-time；
+即時 TWSE OpenAPI 快照則另外保存第一次實際觀測時間，特徵只能從原始發布與首次
+觀測兩者較晚者開始使用。收盤後資料順延至下一交易日。
+
+```powershell
+.\.venv\Scripts\python.exe backfill_disclosures.py --start-year 2018 --end-year 2024
+.\.venv\Scripts\python.exe audit_disclosures.py
+.\.venv\Scripts\python.exe build_disclosure_features.py
+.\.venv\Scripts\python.exe train_v6_disclosures.py
+```
+
+歷史回補按股票、年份與明細快取，可安全續跑。資料 gate 要求五檔都完整查詢
+2018～2024、每檔至少 50 則相關公告、至少 730 天跨度且公告 ID 無重複。實際取得
+`2330:171、2454:146、2317:74、2308:320、2881:114` 則官方歷史文字，全部通過
+資料 gate。凍結的 13 個特徵只使用可解釋的活動、文字長度、數字與正向／負向／
+不確定／財務詞次數，不使用 LLM 產生標籤。
+
+V6 與 V2 在五檔股票、2021～2024 相同日期做 walk-forward 比較。V6 的 Macro F1
+在 3/5 檔改善，但 Balanced Accuracy 只在 2881 改善，平均 Balanced Accuracy、
+平均 Macro F1 與扣成本報酬 gate 都未通過，因此 V6 已登記為 rejected，V2 保持
+champion。這表示目前簡單詞典文字特徵沒有足夠的跨股票穩定性；不應因單一股票
+2881 的改善就升版。
+
+- `reports/v6_disclosure_data_readiness.json`：歷史完整性與訓練資格
+- `reports/v6_disclosure_feature_schema.json`：凍結特徵、詞典與 SHA-256
+- `reports/v6_disclosure_feature_coverage.csv`：逐股票公告與交易日覆蓋
+- `reports/v6_disclosure_walk_forward_folds.csv`：逐股票、逐年度分類結果
+- `reports/v6_disclosure_walk_forward_summary.csv`：V2／V6 逐股票摘要
+- `reports/v6_disclosure_backtest.csv`：固定五日區間的扣成本比較
+- `reports/v6_disclosure_decision.json`：預先固定 gate 與正式決策
+
+未來每日可執行以下指令累積不可變的 forward 快照；它只收資料，不會自動升版：
+
+```powershell
+.\.venv\Scripts\python.exe collect_disclosures.py
+```
 
 ## V5 新聞資料層
 
@@ -343,6 +385,7 @@ V1 的五日漲跌門檻預設為 `±1.5%`。這個設定是以 2021～2024
 - Rejected：V3-lite（V2 + PB），未通過五檔股票外部驗證
 - Rejected：V5-news（V2 + 6 個新聞活動特徵），未通過歷史 walk-forward gate
 - Rejected：V2-market（V2 + 12 個市場特徵），年度穩定性與回測未通過 gate
+- Rejected：V6-disclosure（V2 + 13 個官方公告文字特徵），只在 2881 改善 Balanced Accuracy
 
 建立 V3-lite 候選：
 

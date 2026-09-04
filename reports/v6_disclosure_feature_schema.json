@@ -1,0 +1,64 @@
+{
+  "version": "v6_disclosure_text",
+  "feature_columns": [
+    "disclosure_count",
+    "disclosure_after_close_count",
+    "disclosure_text_chars_mean",
+    "disclosure_numeric_token_count",
+    "disclosure_positive_term_count",
+    "disclosure_negative_term_count",
+    "disclosure_uncertainty_term_count",
+    "disclosure_financial_term_count",
+    "disclosure_net_tone",
+    "disclosure_count_5d",
+    "disclosure_count_20d",
+    "disclosure_net_tone_5d",
+    "disclosure_days_since_update"
+  ],
+  "lexicons": {
+    "positive": [
+      "成長",
+      "增加",
+      "提升",
+      "創新高",
+      "獲利",
+      "轉盈",
+      "上調",
+      "優於"
+    ],
+    "negative": [
+      "下滑",
+      "減少",
+      "衰退",
+      "虧損",
+      "轉虧",
+      "減損",
+      "停工",
+      "違約",
+      "罰款",
+      "下調"
+    ],
+    "uncertainty": [
+      "可能",
+      "預計",
+      "尚未",
+      "不確定",
+      "風險",
+      "估計",
+      "視情況",
+      "尚待"
+    ],
+    "financial": [
+      "營收",
+      "毛利",
+      "獲利",
+      "盈餘",
+      "每股",
+      "資本支出",
+      "財務報告",
+      "現金流"
+    ]
+  },
+  "feature_policy": "deterministic counts only; no LLM-generated labels",
+  "sha256": "30214967561077fbb77416607dc60c1adebfa4e5fd1062d89d80cadffc88cefe"
+}

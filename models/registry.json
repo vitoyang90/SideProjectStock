@@ -50,6 +50,11 @@
       "version": "v2_market",
       "features": "V2 technical + chip + market context",
       "reason": "Failed historical walk-forward gate: balanced_accuracy_wins_at_least_3_of_4, macro_f1_wins_at_least_3_of_4, worst_balanced_accuracy_delta_at_least_minus_0_03, worst_macro_f1_delta_at_least_minus_0_03, net_return_improved_after_costs"
+    },
+    {
+      "version": "v6_disclosure_text",
+      "features": "V2 + frozen official disclosure text counts",
+      "reason": "Failed historical five-stock gate: mean_balanced_accuracy_improved, mean_macro_f1_improved, balanced_accuracy_wins_at_least_3_of_5_stocks, net_return_wins_at_least_3_of_5_stocks, median_net_return_improved"
     }
   ],
   "stock_models": {
@@ -138,5 +143,9 @@
     "status": "completed",
     "decision_path": "reports/v21_decision.json",
     "promoted_stocks": []
+  },
+  "v6_disclosure_experiment": {
+    "status": "rejected_historical_walk_forward",
+    "decision_path": "reports/v6_disclosure_decision.json"
   }
 }

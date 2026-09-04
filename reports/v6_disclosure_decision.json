@@ -1,0 +1,69 @@
+{
+  "version": "v6_disclosure_text",
+  "status": "rejected_historical_walk_forward",
+  "passes_gate": false,
+  "comparison": "V2 versus V2 plus 13 frozen official disclosure-text features",
+  "stocks": [
+    "2330",
+    "2454",
+    "2317",
+    "2308",
+    "2881"
+  ],
+  "validation_years": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "test_period_used_for_selection": false,
+  "schema_sha256": "30214967561077fbb77416607dc60c1adebfa4e5fd1062d89d80cadffc88cefe",
+  "gate_policy": {
+    "required_stock_wins": 3,
+    "maximum_allowed_single_stock_degradation": 0.03,
+    "all_checks_must_pass": true
+  },
+  "gate_checks": {
+    "mean_balanced_accuracy_improved": false,
+    "mean_macro_f1_improved": false,
+    "balanced_accuracy_wins_at_least_3_of_5_stocks": false,
+    "macro_f1_wins_at_least_3_of_5_stocks": true,
+    "worst_stock_balanced_accuracy_delta_at_least_minus_0_03": true,
+    "worst_stock_macro_f1_delta_at_least_minus_0_03": true,
+    "net_return_wins_at_least_3_of_5_stocks": false,
+    "median_net_return_improved": false
+  },
+  "stock_deltas": [
+    {
+      "stock_id": "2308",
+      "delta_balanced_accuracy": -0.010454615679027612,
+      "delta_macro_f1": -0.02879237261580686,
+      "delta_net_return": 0.14878154097974539
+    },
+    {
+      "stock_id": "2317",
+      "delta_balanced_accuracy": -0.00388294135365147,
+      "delta_macro_f1": -0.010065733540623456,
+      "delta_net_return": -0.09253792376089076
+    },
+    {
+      "stock_id": "2330",
+      "delta_balanced_accuracy": -0.0050509222687277755,
+      "delta_macro_f1": 0.012289221358340097,
+      "delta_net_return": -0.05944489529185437
+    },
+    {
+      "stock_id": "2454",
+      "delta_balanced_accuracy": -0.011479368633808329,
+      "delta_macro_f1": 0.0012202216105866581,
+      "delta_net_return": -0.13453416951520702
+    },
+    {
+      "stock_id": "2881",
+      "delta_balanced_accuracy": 0.02482307527561939,
+      "delta_macro_f1": 0.011329014243220581,
+      "delta_net_return": 0.1564012942379317
+    }
+  ],
+  "warning": "Historical research only; a passing model still requires fresh forward validation."
+}
