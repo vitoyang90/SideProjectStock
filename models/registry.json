@@ -55,6 +55,11 @@
       "version": "v6_disclosure_text",
       "features": "V2 + frozen official disclosure text counts",
       "reason": "Failed historical five-stock gate: mean_balanced_accuracy_improved, mean_macro_f1_improved, balanced_accuracy_wins_at_least_3_of_5_stocks, net_return_wins_at_least_3_of_5_stocks, median_net_return_improved"
+    },
+    {
+      "version": "v2.2_binary_2330",
+      "features": "V2 technical + chip features with an up-vs-rest target",
+      "reason": "Failed 2025+ purged daily holdout replay: emitted up on 392/392 rows, matched the naive always-up benchmark, and achieved 0.50 balanced accuracy."
     }
   ],
   "stock_models": {
@@ -156,15 +161,29 @@
   "v22_binary_experiment": {
     "status": "completed",
     "decision_path": "reports/v22_binary_decision.json",
-    "candidate_stocks": [
+    "candidate_stocks": [],
+    "historical_gate_candidate_stocks": [
       "2330"
-    ]
+    ],
+    "post_selection_replay_status": "not_supportive"
   },
-  "binary_candidates": {
+  "binary_candidates": {},
+  "v22_historical_replay": {
+    "status": "not_supportive",
+    "summary_path": "reports/v22_2330_holdout_replay_summary.json",
+    "prediction_path": "reports/v22_2330_holdout_replay_predictions.csv",
+    "period": {
+      "start": "2025-01-02",
+      "end": "2026-08-17",
+      "rows": 392
+    },
+    "counts_toward_live_forward_minimum": false
+  },
+  "rejected_binary_candidates": {
     "2330": {
       "version": "v2.2_binary",
       "artifact_id": "2330_v22_binary_forward_20260905",
-      "status": "shadow_candidate_forward_validation",
+      "status": "rejected_after_2025_holdout_replay",
       "model_family": "xgboost_binary",
       "model_path": "models/v22_binary_candidates/2330_v22_binary.json",
       "probability_threshold": 0.45,
@@ -174,7 +193,16 @@
       "training_end": "2026-08-17",
       "historical_nested_net_return": 0.26262973478111307,
       "historical_baseline_net_return": -0.1440896508253907,
-      "warning": "Shadow only; at least 60 matured forward records are required."
+      "warning": "Rejected by the existing 2025+ purged historical replay.",
+      "historical_replay": {
+        "status": "not_supportive",
+        "period_end": "2026-08-17",
+        "binary_balanced_accuracy": 0.5,
+        "v2_balanced_accuracy": 0.5,
+        "binary_net_return": 0.4298521925588492,
+        "v2_net_return": 0.0,
+        "summary_path": "reports/v22_2330_holdout_replay_summary.json"
+      }
     }
   }
 }

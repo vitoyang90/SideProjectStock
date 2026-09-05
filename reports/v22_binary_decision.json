@@ -10,10 +10,14 @@
   ],
   "selection_uses_only_prior_years": true,
   "test_period_used_for_selection": false,
+  "historical_gate_candidate_stocks": [
+    "2330"
+  ],
+  "active_candidate_stocks": [],
   "stock_decisions": {
     "2330": {
-      "passes_gate": true,
-      "status": "candidate_forward_only",
+      "passes_gate": false,
+      "status": "rejected_after_2025_holdout_replay",
       "selected_probability_threshold": 0.45,
       "n_estimators": 5,
       "model_path": "models/v22_binary_candidates/2330_v22_binary.json",
@@ -33,7 +37,9 @@
       "nested_mean_f1": 0.4150604742537409,
       "baseline_mean_f1": 0.14437367303609341,
       "nested_net_return": 0.26262973478111307,
-      "baseline_net_return": -0.1440896508253907
+      "baseline_net_return": -0.1440896508253907,
+      "passes_pre_2025_gate": true,
+      "post_selection_replay_status": "not_supportive"
     },
     "2454": {
       "passes_gate": false,

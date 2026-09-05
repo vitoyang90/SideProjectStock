@@ -22,6 +22,7 @@ PREDICTION_PATH = Path("data/processed/v22_binary_walk_forward_predictions.csv")
 FOLD_PATH = REPORT_DIR / "v22_binary_folds.csv"
 NESTED_PATH = REPORT_DIR / "v22_binary_nested.csv"
 DECISION_PATH = REPORT_DIR / "v22_binary_decision.json"
+HOLDOUT_REPLAY_PATH = REPORT_DIR / "v22_2330_holdout_replay_summary.json"
 MODEL_DIR = Path("models/v22_binary_candidates")
 THRESHOLDS = (0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65)
 OUTER_YEARS = (2022, 2023, 2024)
@@ -321,6 +322,45 @@ def run_experiment() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
                 "historical_baseline_net_return": baseline_net_return,
                 "warning": "Shadow only; at least 60 matured forward records are required.",
             }
+    historical_gate_candidates = sorted(binary_candidates)
+    holdout_replay = None
+    if HOLDOUT_REPLAY_PATH.exists():
+        holdout_replay = json.loads(HOLDOUT_REPLAY_PATH.read_text(encoding="utf-8"))
+        replay_stock = str(holdout_replay.get("stock_id", ""))
+        if (
+            holdout_replay.get("status") != "supportive"
+            and replay_stock in binary_candidates
+        ):
+            rejected_entry = binary_candidates.pop(replay_stock)
+            rejected_entry["status"] = "rejected_after_2025_holdout_replay"
+            rejected_entry["warning"] = (
+                "Rejected by the existing 2025+ purged historical replay."
+            )
+            rejected_entry["historical_replay"] = {
+                "status": holdout_replay["status"],
+                "period_end": holdout_replay["period"]["end"],
+                "binary_balanced_accuracy": holdout_replay["binary_candidate"][
+                    "balanced_accuracy"
+                ],
+                "v2_balanced_accuracy": holdout_replay["v2_baseline"][
+                    "balanced_accuracy"
+                ],
+                "binary_net_return": holdout_replay["binary_candidate"][
+                    "net_return"
+                ],
+                "v2_net_return": holdout_replay["v2_baseline"]["net_return"],
+                "summary_path": HOLDOUT_REPLAY_PATH.as_posix(),
+            }
+            registry.setdefault("rejected_binary_candidates", {})[
+                replay_stock
+            ] = rejected_entry
+            decisions[replay_stock]["passes_pre_2025_gate"] = True
+            decisions[replay_stock]["passes_gate"] = False
+            decisions[replay_stock]["status"] = "rejected_after_2025_holdout_replay"
+            decisions[replay_stock]["post_selection_replay_status"] = holdout_replay[
+                "status"
+            ]
+
     decision = {
         "version": "v2.2_binary_up_vs_rest",
         "status": "completed",
@@ -329,15 +369,19 @@ def run_experiment() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
         "outer_years": list(OUTER_YEARS),
         "selection_uses_only_prior_years": True,
         "test_period_used_for_selection": False,
+        "historical_gate_candidate_stocks": historical_gate_candidates,
+        "active_candidate_stocks": sorted(binary_candidates),
         "stock_decisions": decisions,
         "warning": "Passing artifacts are candidates for fresh forward comparison, not champion models.",
     }
     registry["v22_binary_experiment"] = {
         "status": "completed",
         "decision_path": DECISION_PATH.as_posix(),
-        "candidate_stocks": [
-            stock_id for stock_id, result in decisions.items() if result["passes_gate"]
-        ],
+        "candidate_stocks": sorted(binary_candidates),
+        "historical_gate_candidate_stocks": historical_gate_candidates,
+        "post_selection_replay_status": (
+            holdout_replay.get("status") if holdout_replay else "not_run"
+        ),
     }
     registry["binary_candidates"] = binary_candidates
     REPORT_DIR.mkdir(parents=True, exist_ok=True)

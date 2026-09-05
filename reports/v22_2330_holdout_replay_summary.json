@@ -1,0 +1,85 @@
+{
+  "version": "v2.2_binary_2330_post_selection_holdout_replay",
+  "status": "not_supportive",
+  "stock_id": "2330",
+  "period": {
+    "start": "2025-01-02",
+    "end": "2026-08-17",
+    "rows": 392
+  },
+  "protocol": {
+    "expanding_window_refit_each_trading_day": true,
+    "labels_must_mature_strictly_before_prediction_date": true,
+    "purged_rows_before_each_prediction": 5,
+    "binary_probability_threshold": 0.45,
+    "binary_n_estimators": 5,
+    "v2_minimum_confidence": 0.4,
+    "v2_minimum_margin": 0.05,
+    "v2_n_estimators": 4,
+    "parameters_selected_from_pre_2025_data": true,
+    "counts_toward_live_forward_minimum": false
+  },
+  "binary_candidate": {
+    "rows": 392,
+    "accuracy": 0.4387755102040816,
+    "balanced_accuracy": 0.5,
+    "f1": 0.6099290780141844,
+    "precision": 0.4387755102040816,
+    "recall": 1.0,
+    "signals": 392,
+    "coverage": 1.0,
+    "non_overlapping_intervals": 79,
+    "non_overlapping_signals": 79,
+    "net_return": 0.4298521925588492,
+    "max_drawdown": -0.28349373670351297
+  },
+  "v2_baseline": {
+    "rows": 392,
+    "accuracy": 0.5612244897959183,
+    "balanced_accuracy": 0.5,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "signals": 0,
+    "coverage": 0.0,
+    "non_overlapping_intervals": 79,
+    "non_overlapping_signals": 0,
+    "net_return": 0.0,
+    "max_drawdown": 0.0
+  },
+  "naive_always_up_baseline": {
+    "rows": 392,
+    "accuracy": 0.4387755102040816,
+    "balanced_accuracy": 0.5,
+    "f1": 0.6099290780141844,
+    "precision": 0.4387755102040816,
+    "recall": 1.0,
+    "signals": 392,
+    "coverage": 1.0,
+    "non_overlapping_intervals": 79,
+    "non_overlapping_signals": 79,
+    "net_return": 0.4298521925588492,
+    "max_drawdown": -0.28349373670351297
+  },
+  "binary_probability_diagnostics": {
+    "minimum": 0.46318069100379944,
+    "maximum": 0.5297028422355652,
+    "mean": 0.5030985782493134,
+    "standard_deviation": 0.00972389731515287
+  },
+  "gate_checks": {
+    "candidate_emits_both_signal_classes": false,
+    "candidate_coverage_between_5_and_95_percent": false,
+    "balanced_accuracy_improved": false,
+    "f1_improved": true,
+    "signal_precision_not_worse": true,
+    "net_return_improved": true,
+    "balanced_accuracy_beats_naive_always_up": false,
+    "net_return_beats_naive_always_up": false,
+    "candidate_net_return_positive": true,
+    "at_least_15_signals": true,
+    "worst_annual_balanced_accuracy_delta_at_least_minus_0_05": true
+  },
+  "registry_action": "deactivated_shadow_candidate",
+  "warning": "This is historical replay evidence, not an immutable prediction record and not a substitute for fresh forward validation."
+}

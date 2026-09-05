@@ -290,19 +290,36 @@ nested 比較：
 .\.venv\Scripts\python.exe train_v22_binary.py
 ```
 
-只有 2330 通過全部歷史 gate：2022～2024 nested 平均 Balanced Accuracy 相對 V2
+只有 2330 通過第一階段歷史 gate：2022～2024 nested 平均 Balanced Accuracy 相對 V2
 上漲訊號提高 `3.26` 個百分點，Balanced Accuracy 與 F1 都在 2/3 年勝出，且合併
 扣成本報酬改善。最終門檻為上漲機率 `45%`。其他四檔未通過，因此沒有建立可用
-shadow candidate。2330 也只進入 forward shadow，不取代 champion：
+shadow candidate。2330 當時只進入 forward shadow，沒有取代 champion：
 
 ```powershell
 .\.venv\Scripts\python.exe analyze_binary_candidate.py --stock-id 2330 --record
 .\.venv\Scripts\python.exe evaluate_v22_forward.py
 ```
 
-至少累積 60 筆成熟預測且其中 15 筆有出場訊號，才取得升級審查資格。第一筆
-shadow prediction 已保存；資料日期為 `2026-09-04`，上漲機率 `50.2%`，高於
-`45%` 門檻，但目前尚未經過五個交易日，不能評分。
+原升級規則要求至少 60 筆成熟預測且其中 15 筆有出場訊號。第一筆 shadow
+prediction 已保存；資料日期為 `2026-09-04`，上漲機率 `50.2%`。
+
+2025 年起的既有資料可用來做額外的嚴格歷史重播。以下指令會固定 pre-2025
+選出的樹數與 `45%` 門檻，每個交易日重新訓練，而且排除預測日前五筆尚未成熟
+的標籤；它會在完全相同的日期與現行 V2 上漲訊號比較：
+
+```powershell
+.\.venv\Scripts\python.exe replay_v22_holdout.py
+```
+
+這是 post-selection historical replay，不是當時實際保存的預測，因此不會計入
+forward 升級所需的 60 筆成熟紀錄。實際重播 2025-01-02～2026-08-17 共 392 筆後，
+V2.2 每天都發出上漲訊號，Balanced Accuracy 僅 `0.50`；`42.99%` 扣成本報酬是
+全程持有曝險，與 naive always-up 基準相同，並非模型擇時能力。它未通過固定 gate，已停止 shadow candidate，
+V2 繼續維持 champion。
+
+- `reports/v22_2330_holdout_replay_predictions.csv`：逐日訓練邊界、機率與訊號
+- `reports/v22_2330_holdout_replay_annual.csv`：2025、2026 分年比較
+- `reports/v22_2330_holdout_replay_summary.json`：固定 gate 與整體結果
 
 - `models/v22_binary_candidates/2330_v22_binary.json`：2330 shadow 模型
 - `reports/v22_binary_nested.csv`：五檔 nested 比較
@@ -320,7 +337,7 @@ shadow prediction 已保存；資料日期為 `2026-09-04`，上漲機率 `50.2%
 - `GET /health`：服務狀態與支援股票
 - `GET /api/stocks`：模型品質與方向訊號資格
 - `POST /api/analyze/{stock_id}`：建立分析；可用 `refresh`、`record`、`as_of` 查詢參數
-- `POST /api/analyze/2330/binary-shadow`：執行 V2.2 shadow；可用 `record`、`as_of`
+- `POST /api/analyze/{stock_id}/binary-shadow`：僅供通過 gate 的 V2.2 shadow；目前無有效候選
 - `GET /docs`：互動式 API 文件
 
 ## 執行
@@ -434,7 +451,7 @@ V1 的五日漲跌門檻預設為 `±1.5%`。這個設定是以 2021～2024
 - Rejected：V5-news（V2 + 6 個新聞活動特徵），未通過歷史 walk-forward gate
 - Rejected：V2-market（V2 + 12 個市場特徵），年度穩定性與回測未通過 gate
 - Rejected：V6-disclosure（V2 + 13 個官方公告文字特徵），只在 2881 改善 Balanced Accuracy
-- Shadow candidate：2330 V2.2 binary，歷史 gate 通過，等待至少 60 筆成熟 forward 結果
+- Rejected：2330 V2.2 binary，2025+ purged replay 每天都出現上漲訊號，沒有方向辨識力
 
 建立 V3-lite 候選：
 
