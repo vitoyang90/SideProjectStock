@@ -127,13 +127,17 @@ def _view_from_score(score: int) -> str:
     return "中性"
 
 
-def _prediction_label(probabilities: np.ndarray) -> tuple[int, str, bool, float]:
+def _prediction_label(
+    probabilities: np.ndarray,
+    minimum_confidence: float = MIN_PREDICTION_CONFIDENCE,
+    minimum_margin: float = MIN_TOP_PROBABILITY_MARGIN,
+) -> tuple[int, str, bool, float]:
     order = np.argsort(probabilities)
     predicted_class = int(order[-1])
     margin = float(probabilities[order[-1]] - probabilities[order[-2]])
     abstained = bool(
-        probabilities[predicted_class] < MIN_PREDICTION_CONFIDENCE
-        or margin < MIN_TOP_PROBABILITY_MARGIN
+        probabilities[predicted_class] < minimum_confidence
+        or margin < minimum_margin
     )
     trend = "不確定" if abstained else CLASS_NAMES_ZH[predicted_class]
     return predicted_class, trend, abstained, margin
@@ -240,14 +244,27 @@ def build_report(
         probabilities = model.predict(model_input)[0]
     else:
         raise ValueError(f"Unsupported model family: {model_family}")
+    policy = model_info.get("abstention_policy", {})
+    minimum_confidence = float(
+        policy.get("minimum_confidence", MIN_PREDICTION_CONFIDENCE)
+    )
+    minimum_margin = float(
+        policy.get(
+            "minimum_top_probability_margin", MIN_TOP_PROBABILITY_MARGIN
+        )
+    )
     predicted_class, trend, abstained, probability_margin = _prediction_label(
-        probabilities
+        probabilities, minimum_confidence, minimum_margin
     )
     abstention_reasons = []
-    if probabilities[predicted_class] < MIN_PREDICTION_CONFIDENCE:
-        abstention_reasons.append("最高類別機率低於 40%")
-    if probability_margin < MIN_TOP_PROBABILITY_MARGIN:
-        abstention_reasons.append("前兩名類別機率差低於 5%")
+    if probabilities[predicted_class] < minimum_confidence:
+        abstention_reasons.append(
+            f"最高類別機率低於 {minimum_confidence:.0%}"
+        )
+    if probability_margin < minimum_margin:
+        abstention_reasons.append(
+            f"前兩名類別機率差低於 {minimum_margin:.0%}"
+        )
     if not model_info.get("direction_signal_eligible", True):
         abstained = True
         trend = "不確定"
@@ -288,8 +305,9 @@ def build_report(
             "confidence": float(probabilities[predicted_class]),
             "top_probability_margin": probability_margin,
             "abstention_policy": {
-                "minimum_confidence": MIN_PREDICTION_CONFIDENCE,
-                "minimum_top_probability_margin": MIN_TOP_PROBABILITY_MARGIN,
+                "version": policy.get("version", "fixed_v1"),
+                "minimum_confidence": minimum_confidence,
+                "minimum_top_probability_margin": minimum_margin,
             },
             "probabilities": {
                 "down": float(probabilities[0]),
@@ -381,6 +399,15 @@ def record_forward_prediction(report: dict, path: Path | None = None) -> Path:
         "probability_down": probabilities["down"],
         "probability_neutral": probabilities["neutral"],
         "probability_up": probabilities["up"],
+        "policy_version": prediction.get("abstention_policy", {}).get(
+            "version", "fixed_v1"
+        ),
+        "minimum_confidence": prediction.get("abstention_policy", {}).get(
+            "minimum_confidence", MIN_PREDICTION_CONFIDENCE
+        ),
+        "minimum_top_probability_margin": prediction.get(
+            "abstention_policy", {}
+        ).get("minimum_top_probability_margin", MIN_TOP_PROBABILITY_MARGIN),
     }
     if path.exists():
         existing = pd.read_csv(path)

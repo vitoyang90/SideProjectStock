@@ -1,0 +1,136 @@
+{
+  "version": "v2.2_binary_up_vs_rest",
+  "status": "completed",
+  "target": "future five-day return greater than +1.5%",
+  "baseline": "active V2 three-class up signal with fixed abstention policy",
+  "outer_years": [
+    2022,
+    2023,
+    2024
+  ],
+  "selection_uses_only_prior_years": true,
+  "test_period_used_for_selection": false,
+  "stock_decisions": {
+    "2330": {
+      "passes_gate": true,
+      "status": "candidate_forward_only",
+      "selected_probability_threshold": 0.45,
+      "n_estimators": 5,
+      "model_path": "models/v22_binary_candidates/2330_v22_binary.json",
+      "gate_checks": {
+        "mean_balanced_accuracy_improved": true,
+        "mean_f1_improved": true,
+        "balanced_accuracy_wins_at_least_2_of_3": true,
+        "f1_wins_at_least_2_of_3": true,
+        "worst_balanced_accuracy_delta_at_least_minus_0_05": true,
+        "worst_f1_delta_at_least_minus_0_05": true,
+        "net_return_improved": true
+      },
+      "nested_mean_delta_balanced_accuracy": 0.03261227564421487,
+      "nested_mean_delta_f1": 0.2706868012176474,
+      "nested_mean_balanced_accuracy": 0.5681010431001955,
+      "baseline_mean_balanced_accuracy": 0.5354887674559806,
+      "nested_mean_f1": 0.4150604742537409,
+      "baseline_mean_f1": 0.14437367303609341,
+      "nested_net_return": 0.26262973478111307,
+      "baseline_net_return": -0.1440896508253907
+    },
+    "2454": {
+      "passes_gate": false,
+      "status": "rejected",
+      "selected_probability_threshold": 0.35,
+      "n_estimators": 3,
+      "model_path": "models/v22_binary_candidates/2454_v22_binary.json",
+      "gate_checks": {
+        "mean_balanced_accuracy_improved": true,
+        "mean_f1_improved": true,
+        "balanced_accuracy_wins_at_least_2_of_3": false,
+        "f1_wins_at_least_2_of_3": true,
+        "worst_balanced_accuracy_delta_at_least_minus_0_05": true,
+        "worst_f1_delta_at_least_minus_0_05": true,
+        "net_return_improved": false
+      },
+      "nested_mean_delta_balanced_accuracy": 0.0054294418238993725,
+      "nested_mean_delta_f1": 0.5562181740568676,
+      "nested_mean_balanced_accuracy": 0.5,
+      "baseline_mean_balanced_accuracy": 0.4945705581761006,
+      "nested_mean_f1": 0.5786271376423018,
+      "baseline_mean_f1": 0.022408963585434174,
+      "nested_net_return": -0.47534059223979874,
+      "baseline_net_return": 0.08405318118948801
+    },
+    "2317": {
+      "passes_gate": false,
+      "status": "rejected",
+      "selected_probability_threshold": 0.35,
+      "n_estimators": 6,
+      "model_path": "models/v22_binary_candidates/2317_v22_binary.json",
+      "gate_checks": {
+        "mean_balanced_accuracy_improved": false,
+        "mean_f1_improved": true,
+        "balanced_accuracy_wins_at_least_2_of_3": false,
+        "f1_wins_at_least_2_of_3": true,
+        "worst_balanced_accuracy_delta_at_least_minus_0_05": true,
+        "worst_f1_delta_at_least_minus_0_05": true,
+        "net_return_improved": false
+      },
+      "nested_mean_delta_balanced_accuracy": -0.012875285086712282,
+      "nested_mean_delta_f1": 0.3218979183098354,
+      "nested_mean_balanced_accuracy": 0.5,
+      "baseline_mean_balanced_accuracy": 0.5128752850867123,
+      "nested_mean_f1": 0.45527674754853725,
+      "baseline_mean_f1": 0.13337882923870184,
+      "nested_net_return": -0.22748878424318175,
+      "baseline_net_return": 0.1408058412924671
+    },
+    "2308": {
+      "passes_gate": false,
+      "status": "rejected",
+      "selected_probability_threshold": 0.45,
+      "n_estimators": 4,
+      "model_path": "models/v22_binary_candidates/2308_v22_binary.json",
+      "gate_checks": {
+        "mean_balanced_accuracy_improved": false,
+        "mean_f1_improved": true,
+        "balanced_accuracy_wins_at_least_2_of_3": false,
+        "f1_wins_at_least_2_of_3": true,
+        "worst_balanced_accuracy_delta_at_least_minus_0_05": true,
+        "worst_f1_delta_at_least_minus_0_05": true,
+        "net_return_improved": false
+      },
+      "nested_mean_delta_balanced_accuracy": -0.01225409134971774,
+      "nested_mean_delta_f1": 0.47276101347285165,
+      "nested_mean_balanced_accuracy": 0.4935897435897436,
+      "baseline_mean_balanced_accuracy": 0.5058438349394613,
+      "nested_mean_f1": 0.4994276801395183,
+      "baseline_mean_f1": 0.02666666666666667,
+      "nested_net_return": -0.29421181948851394,
+      "baseline_net_return": 0.0
+    },
+    "2881": {
+      "passes_gate": false,
+      "status": "rejected",
+      "selected_probability_threshold": 0.4,
+      "n_estimators": 2,
+      "model_path": "models/v22_binary_candidates/2881_v22_binary.json",
+      "gate_checks": {
+        "mean_balanced_accuracy_improved": false,
+        "mean_f1_improved": true,
+        "balanced_accuracy_wins_at_least_2_of_3": false,
+        "f1_wins_at_least_2_of_3": true,
+        "worst_balanced_accuracy_delta_at_least_minus_0_05": true,
+        "worst_f1_delta_at_least_minus_0_05": true,
+        "net_return_improved": false
+      },
+      "nested_mean_delta_balanced_accuracy": -0.011980347694633409,
+      "nested_mean_delta_f1": 0.3689435558082446,
+      "nested_mean_balanced_accuracy": 0.5,
+      "baseline_mean_balanced_accuracy": 0.5119803476946334,
+      "nested_mean_f1": 0.47846736533205414,
+      "baseline_mean_f1": 0.10952380952380952,
+      "nested_net_return": -0.4821022223341802,
+      "baseline_net_return": -0.04393781371494143
+    }
+  },
+  "warning": "Passing artifacts are candidates for fresh forward comparison, not champion models."
+}

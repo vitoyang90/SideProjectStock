@@ -147,5 +147,34 @@
   "v6_disclosure_experiment": {
     "status": "rejected_historical_walk_forward",
     "decision_path": "reports/v6_disclosure_decision.json"
+  },
+  "signal_policy_experiment": {
+    "status": "completed",
+    "decision_path": "reports/signal_policy_decision.json",
+    "active_stocks": []
+  },
+  "v22_binary_experiment": {
+    "status": "completed",
+    "decision_path": "reports/v22_binary_decision.json",
+    "candidate_stocks": [
+      "2330"
+    ]
+  },
+  "binary_candidates": {
+    "2330": {
+      "version": "v2.2_binary",
+      "artifact_id": "2330_v22_binary_forward_20260905",
+      "status": "shadow_candidate_forward_validation",
+      "model_family": "xgboost_binary",
+      "model_path": "models/v22_binary_candidates/2330_v22_binary.json",
+      "probability_threshold": 0.45,
+      "target": "future_5d_return_gt_1_5pct",
+      "n_estimators": 5,
+      "trained_on": "2026-09-05",
+      "training_end": "2026-08-17",
+      "historical_nested_net_return": 0.26262973478111307,
+      "historical_baseline_net_return": -0.1440896508253907,
+      "warning": "Shadow only; at least 60 matured forward records are required."
+    }
   }
 }

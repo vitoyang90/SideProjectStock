@@ -1,0 +1,2 @@
+﻿prediction_date,recorded_at,stock_id,model_version,close,probability_up,probability_threshold,signal_emitted,maturity_date,valid_forward_record,matured,actual_return_5d,actual_up,correct,net_strategy_return
+2026-09-04,2026-09-05T18:05:13+08:00,2330,2330_v22_binary_forward_20260905,2410.0,0.5023964047431946,0.45,True,,False,False,,,,

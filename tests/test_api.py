@@ -35,12 +35,30 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
         }
         self.assertFalse(stocks["2454"]["direction_signal_eligible"])
         self.assertTrue(stocks["2317"]["direction_signal_eligible"])
+        self.assertTrue(stocks["2330"]["binary_shadow_candidate"])
+        self.assertFalse(stocks["2317"]["binary_shadow_candidate"])
 
     async def test_unknown_stock_returns_client_error(self):
         response = await self.client.post("/api/analyze/9999")
 
         self.assertEqual(response.status_code, 400)
         self.assertIn("No stock-specific model", response.json()["detail"])
+
+    async def test_binary_shadow_rejects_non_candidate_stock(self):
+        response = await self.client.post("/api/analyze/2317/binary-shadow")
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("No V2.2 binary shadow candidate", response.json()["detail"])
+
+    async def test_binary_shadow_returns_2330_candidate(self):
+        response = await self.client.post(
+            "/api/analyze/2330/binary-shadow?as_of=2026-09-05"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["model"]["version"], "v2.2_binary")
+        self.assertEqual(payload["prediction"]["threshold"], 0.45)
 
 
 if __name__ == "__main__":

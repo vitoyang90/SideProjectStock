@@ -93,6 +93,16 @@ class AnalyzeTests(unittest.TestCase):
         self.assertEqual(trend, "上漲")
         self.assertFalse(abstained)
 
+    def test_prediction_accepts_model_specific_thresholds(self):
+        _, trend, abstained, _ = _prediction_label(
+            np.array([0.37, 0.30, 0.33]),
+            minimum_confidence=0.36,
+            minimum_margin=0.02,
+        )
+
+        self.assertEqual(trend, "下跌")
+        self.assertFalse(abstained)
+
     def test_markdown_warns_when_data_is_stale(self):
         report = {
             "stock_id": "2330",

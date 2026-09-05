@@ -1,0 +1,15 @@
+{
+  "status": "waiting_for_five_trading_days",
+  "records": 1,
+  "valid_forward_records": 0,
+  "matured_records": 0,
+  "signals_emitted": 0,
+  "binary_accuracy": null,
+  "signal_precision": null,
+  "net_strategy_return": null,
+  "promotion_ready": false,
+  "promotion_minimums": {
+    "matured_records": 60,
+    "emitted_signals": 15
+  }
+}

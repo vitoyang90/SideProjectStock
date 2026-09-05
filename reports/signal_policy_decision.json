@@ -1,0 +1,95 @@
+{
+  "version": "nested_selective_signal_policy_v1",
+  "status": "completed",
+  "baseline_policy": {
+    "minimum_confidence": 0.4,
+    "minimum_top_probability_margin": 0.05
+  },
+  "outer_years": [
+    2022,
+    2023,
+    2024
+  ],
+  "selection_uses_only_prior_years": true,
+  "promotion_policy": {
+    "minimum_accuracy_improvement": 0.01,
+    "required_accuracy_wins": 2,
+    "minimum_total_calls": 40,
+    "minimum_coverage": 0.05,
+    "net_return_must_not_worsen": true,
+    "model_must_already_be_direction_eligible": true
+  },
+  "stock_decisions": {
+    "2330": {
+      "passes_gate": false,
+      "status": "rejected_keep_fixed_policy",
+      "selected_minimum_confidence": 0.34,
+      "selected_minimum_margin": 0.0,
+      "gate_checks": {
+        "selective_accuracy_improves_by_at_least_1pp": false,
+        "accuracy_wins_at_least_2_of_3_years": false,
+        "at_least_40_emitted_signals": true,
+        "coverage_at_least_5_percent": true,
+        "net_return_not_worse": true
+      },
+      "model_direction_eligible": true
+    },
+    "2454": {
+      "passes_gate": false,
+      "status": "rejected_keep_fixed_policy",
+      "selected_minimum_confidence": 0.4,
+      "selected_minimum_margin": 0.0,
+      "gate_checks": {
+        "selective_accuracy_improves_by_at_least_1pp": false,
+        "accuracy_wins_at_least_2_of_3_years": false,
+        "at_least_40_emitted_signals": true,
+        "coverage_at_least_5_percent": true,
+        "net_return_not_worse": false
+      },
+      "model_direction_eligible": false
+    },
+    "2317": {
+      "passes_gate": false,
+      "status": "rejected_keep_fixed_policy",
+      "selected_minimum_confidence": 0.34,
+      "selected_minimum_margin": 0.05,
+      "gate_checks": {
+        "selective_accuracy_improves_by_at_least_1pp": false,
+        "accuracy_wins_at_least_2_of_3_years": false,
+        "at_least_40_emitted_signals": true,
+        "coverage_at_least_5_percent": true,
+        "net_return_not_worse": true
+      },
+      "model_direction_eligible": true
+    },
+    "2308": {
+      "passes_gate": false,
+      "status": "rejected_keep_fixed_policy",
+      "selected_minimum_confidence": 0.34,
+      "selected_minimum_margin": 0.0,
+      "gate_checks": {
+        "selective_accuracy_improves_by_at_least_1pp": false,
+        "accuracy_wins_at_least_2_of_3_years": true,
+        "at_least_40_emitted_signals": true,
+        "coverage_at_least_5_percent": true,
+        "net_return_not_worse": true
+      },
+      "model_direction_eligible": true
+    },
+    "2881": {
+      "passes_gate": false,
+      "status": "rejected_keep_fixed_policy",
+      "selected_minimum_confidence": 0.42,
+      "selected_minimum_margin": 0.05,
+      "gate_checks": {
+        "selective_accuracy_improves_by_at_least_1pp": false,
+        "accuracy_wins_at_least_2_of_3_years": false,
+        "at_least_40_emitted_signals": true,
+        "coverage_at_least_5_percent": true,
+        "net_return_not_worse": true
+      },
+      "model_direction_eligible": true
+    }
+  },
+  "warning": "Thresholds remain research-only until post-build forward outcomes mature."
+}

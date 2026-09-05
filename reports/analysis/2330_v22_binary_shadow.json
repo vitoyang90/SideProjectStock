@@ -1,0 +1,36 @@
+{
+  "stock_id": "2330",
+  "prediction_date": "2026-09-04",
+  "requested_as_of": "2026-09-05",
+  "data_staleness_calendar_days": 1,
+  "model": {
+    "version": "v2.2_binary",
+    "artifact_id": "2330_v22_binary_forward_20260905",
+    "status": "shadow_candidate_forward_validation",
+    "model_family": "xgboost_binary",
+    "model_path": "models/v22_binary_candidates/2330_v22_binary.json",
+    "probability_threshold": 0.45,
+    "target": "future_5d_return_gt_1_5pct",
+    "n_estimators": 5,
+    "trained_on": "2026-09-05",
+    "training_end": "2026-08-17",
+    "historical_nested_net_return": 0.26262973478111307,
+    "historical_baseline_net_return": -0.1440896508253907,
+    "warning": "Shadow only; at least 60 matured forward records are required."
+  },
+  "prediction": {
+    "probability_up": 0.5023964047431946,
+    "probability_not_up": 0.4976035952568054,
+    "threshold": 0.45,
+    "signal": "上漲",
+    "emitted": true
+  },
+  "market_snapshot": {
+    "close": 2410.0
+  },
+  "limitations": [
+    "這是 shadow candidate，不會取代目前 V2 趨勢判斷。",
+    "只有建置後成熟的 forward 結果可決定是否升級。",
+    "內容僅供研究，不構成投資建議。"
+  ]
+}

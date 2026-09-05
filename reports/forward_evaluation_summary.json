@@ -1,0 +1,12 @@
+{
+  "status": "waiting_for_five_trading_days",
+  "prediction_records": 6,
+  "valid_forward_records": 0,
+  "matured_records": 0,
+  "emitted_matured_signals": 0,
+  "raw_accuracy": null,
+  "raw_balanced_accuracy": null,
+  "raw_log_loss": null,
+  "emitted_signal_accuracy": null,
+  "warning": "Promotion decisions require materially more than one five-day outcome per stock."
+}
